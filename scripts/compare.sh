@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+# Runs the Prequal-vs-WRR load ramp used for the demo comparison.
+#
+# Capacity assumptions from docker-compose.yml:
+#   server1/2  CPU_LOAD=60  MAX_CONCURRENCY=3   about 68 req/s each
+#   server3    CPU_LOAD=0   MAX_CONCURRENCY=20  much higher spare capacity
+#
+# The bgload container sends traffic straight to server1 and server2. That load
+# appears in server-local X-RIF, but it is absent from load-balancer counters.
+#
+# Baseline is intentionally near the leftover capacity of the contended servers:
+#   (68 - 20) req/s per contended server, rounded to 141 total req/s.
+#
+# Prequal should steer most traffic to server3 once its probe pool is warm.
+#
+# Expected shape: both policies survive low load; WRR starts failing as the
+# contended replicas saturate; Prequal should continue avoiding them.
+#
+# Required tools: hey, curl, bc, and awk. Start services with docker compose.
+
+set -euo pipefail
+
+DURATION=30          # runtime for each load step, in seconds
+PREQUAL_URL="http://localhost:8080"
+WRR_URL="http://localhost:8081"
+WORKERS=15           # parallel hey clients used at every step
+
+# Keep this slightly conservative so the first WRR errors appear near 103%.
+BASELINE=141
+
+usage() {
+    cat <<EOF
+Usage: $0 [OPTIONS]
+
+Replicate Figure 6: Prequal vs WRR load-ramp experiment.
+
+OPTIONS:
+    -d, --duration SEC    Duration per load level in seconds (default: $DURATION)
+    -b, --baseline QPS    WRR 100%% capacity in req/s (default: $BASELINE)
+    -h, --help            Show this help
+
+EXAMPLE:
+    ./scripts/compare.sh --duration 60
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -d|--duration) DURATION="$2"; shift 2 ;;
+        -b|--baseline) BASELINE="$2"; shift 2 ;;
+        -h|--help)     usage; exit 0 ;;
+        *) echo "Unknown option: $1"; usage; exit 1 ;;
+    esac
+done
+
+check_deps() {
+    local missing=0
+    for cmd in hey curl bc awk; do
+        if ! command -v "$cmd" &>/dev/null; then
+            echo "Missing: $cmd"
+            [[ "$cmd" == "hey" ]] && echo "   Install: brew install hey"
+            missing=1
+        fi
+    done
+    [[ $missing -eq 0 ]] || exit 1
+}
+
+check_services() {
+    echo "Checking services..."
+    for url in "$PREQUAL_URL/healthz" "$WRR_URL/healthz"; do
+        if ! curl -sf "$url" >/dev/null 2>&1; then
+            echo "Not responding: $url"
+            echo "   Start with: docker compose up -d"
+            exit 1
+        fi
+    done
+    echo "Both load balancers are up."
+}
+
+check_deps
+check_services
+
+# Warm only Prequal so its pool sees bgload while WRR keeps its initial weights.
+echo ""
+echo "Warming up Prequal probe pool (15s) — bgload is running on server1/2..."
+hey -z 15s -q 1 -c "$WORKERS" "$PREQUAL_URL" >/dev/null 2>&1
+echo "Warmup done.  Baseline WRR capacity: ${BASELINE} req/s  (68 req/s capacity − 20 bgload = 48 available per server × 3)"
+echo "(bgload sends 20 req/s to each of server1/2 — raises X-RIF, invisible to WRR latency)"
+
+# Each step increases by roughly 10/9; hey -q is per worker, not total QPS.
+LEVELS=(0.75 0.83 0.93 1.03 1.14 1.27 1.41 1.57 1.74)
+NAMES=("75%" "83%" "93%" "103%" "114%" "127%" "141%" "157%" "174%")
+RESULTS_DIR="/tmp/prequal_compare_$(date +%s)"
+mkdir -p "$RESULTS_DIR"
+
+echo ""
+echo "╔══════════════════════════════════════════════════════════════════════════════╗"
+echo "║            Prequal vs WRR — Load Ramp (Figure 6 Replication)               ║"
+echo "╠══════════════════════════════════════════════════════════════════════════════╣"
+printf "║  %-8s  %-8s  %-24s  %-24s  ║\n" "Load" "QPS" "Prequal p99" "WRR p99"
+echo "╠══════════════════════════════════════════════════════════════════════════════╣"
+
+for i in "${!LEVELS[@]}"; do
+    level="${LEVELS[$i]}"
+    name="${NAMES[$i]}"
+    total_qps=$(echo "$BASELINE * $level" | bc -l | awk '{printf "%.0f", $1}')
+    per_worker=$(echo "scale=2; $total_qps / $WORKERS" | bc -l)
+
+    pfile="$RESULTS_DIR/prequal_step${i}.txt"
+    wfile="$RESULTS_DIR/wrr_step${i}.txt"
+
+    # Run policies one after the other so they do not share the same load spike.
+    hey -z "${DURATION}s" -q "$per_worker" -c "$WORKERS" "$PREQUAL_URL" > "$pfile" 2>&1
+    sleep 3
+    hey -z "${DURATION}s" -q "$per_worker" -c "$WORKERS" "$WRR_URL"    > "$wfile" 2>&1
+
+    # hey prints percentile labels with a literal percent sign.
+    p99_prequal=$(grep "99%%" "$pfile" | awk '{printf "%.0f", $3*1000}')
+    p99_wrr=$(    grep "99%%" "$wfile" | awk '{printf "%.0f", $3*1000}')
+
+    # Treat any recorded non-200 bucket as an experiment error.
+    err_p=$(awk '/\[/ && !/\[200\]/ && /responses/ {for(i=1;i<=NF;i++) if($i~/^[0-9]+$/ && $i+0>0) sum+=$i+0} END{print sum+0}' "$pfile" 2>/dev/null || echo 0)
+    err_w=$(awk '/\[/ && !/\[200\]/ && /responses/ {for(i=1;i<=NF;i++) if($i~/^[0-9]+$/ && $i+0>0) sum+=$i+0} END{print sum+0}' "$wfile" 2>/dev/null || echo 0)
+
+    [[ -z "$p99_prequal" ]] && p99_prequal="timeout"
+    [[ -z "$p99_wrr"     ]] && p99_wrr="timeout"
+
+    p_label="${p99_prequal}ms"
+    w_label="${p99_wrr}ms"
+    [[ "$err_p" -gt 0 ]] && p_label="${p99_prequal}ms (${err_p} err)"
+    [[ "$err_w" -gt 0 ]] && w_label="${p99_wrr}ms (${err_w} err)"
+
+    printf "║  %-8s  %-8s  %-24s  %-24s  ║\n" "$name" "${total_qps}/s" "$p_label" "$w_label"
+
+    [[ $i -lt $((${#LEVELS[@]} - 1)) ]] && sleep 5
+done
+
+echo "╚══════════════════════════════════════════════════════════════════════════════╝"
+echo ""
+echo "Detailed hey output saved in: $RESULTS_DIR"
+echo ""
+echo "View live metrics in Grafana: http://localhost:3001  (admin/admin)"
+echo "  - 'Request Latency'   → Fig. 5 (tail latency)"
+echo "  - 'Error Rate'        → Fig. 6b (WRR errors above 103%)"
+echo "  - 'RIF per Server'    → Fig. 4 (Prequal steers away from loaded servers)"
+echo "  - 'Traffic Steering'  → Prequal routes ~95%+ to server3"

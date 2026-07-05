@@ -1,0 +1,156 @@
+version: "3.9"
+
+networks:
+  prequal-net:
+    driver: bridge
+
+services:
+  server1:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      PORT: "80"
+      SERVER_ID: "server1"
+      CPU_LOAD: "60"         
+      MAX_CONCURRENCY: "3"   
+    networks:
+      - prequal-net
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: "256m"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  server2:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      PORT: "80"
+      SERVER_ID: "server2"
+      CPU_LOAD: "60"
+      MAX_CONCURRENCY: "3"
+    networks:
+      - prequal-net
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: "256m"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  server3:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      PORT: "80"
+      SERVER_ID: "server3"
+      CPU_LOAD: "0"          
+      MAX_CONCURRENCY: "20"  
+    networks:
+      - prequal-net
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: "256m"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  bgload:
+    build:
+      context: .
+      dockerfile: cmd/bgload/Dockerfile
+    environment:
+      BG_TARGETS: "server1:80,server2:80"
+      BG_RATE: "20"   
+    depends_on:
+      - server1
+      - server2
+    networks:
+      - prequal-net
+    restart: unless-stopped
+
+  lb-prequal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      LB_PORT: "8080"
+      LB_ALGORITHM: "prequal"
+      LB_SERVERS: "server1=server1:80,server2=server2:80,server3=server3:80"
+      LB_QRIF: "0.84"
+      LB_PROBE_RATE: "2"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server1
+      - server2
+      - server3
+    networks:
+      - prequal-net
+    restart: unless-stopped
+
+  lb-weightedrr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      LB_PORT: "8080"
+      LB_ALGORITHM: "weightedrr"
+      LB_SERVERS: "server1=server1:80,server2=server2:80,server3=server3:80"
+      LB_WEIGHT_INTERVAL: "3600s" 
+    ports:
+      - "8081:8080"
+    depends_on:
+      - server1
+      - server2
+      - server3
+    networks:
+      - prequal-net
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    networks:
+      - prequal-net
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--storage.tsdb.retention.time=7d"
+
+  grafana:
+    image: grafana/grafana:10.4.2
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: "admin"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: "/var/lib/grafana/dashboards/loadbalancer.json"
+    volumes:
+      - ./config/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./config/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - prequal-net
