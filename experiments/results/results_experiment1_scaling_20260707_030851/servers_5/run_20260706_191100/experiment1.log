@@ -1,0 +1,47 @@
+2026-07-06 19:11:00  INFO     ======================================================================
+2026-07-06 19:11:00  INFO     EXPERIMENT 1 | servers=5 | per_server_qps=25 | workers=8
+2026-07-06 19:11:00  INFO     loads=[0.75, 0.83, 0.93, 1.03, 1.14, 1.27, 1.41, 1.57, 1.74] | step=240s | bin=5s | total~72.0 min | output=/users/Mr_Gary/experiment1_scaling_results/servers_5/run_20260706_191100
+2026-07-06 19:11:00  INFO     ======================================================================
+2026-07-06 19:11:01  INFO     Configuring both LBs to first 5 healthy backends...
+2026-07-06 19:11:16  INFO     Warming up both policies (15s each)...
+2026-07-06 19:11:46  INFO     Starting host CPU sampler for ['bhost1', 'bhost2', 'bhost3', 'bhost4', 'bhost5'] every 5s...
+2026-07-06 19:11:46  INFO     [1/18] wrr load=75% target=94 qps workers=8 duration=240s
+2026-07-06 19:15:47  INFO         wrr p50=42000 p90=51200 p99=89900 p99.9=97400 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 19:15:47  INFO     [2/18] prequal load=75% target=94 qps workers=8 duration=240s
+2026-07-06 19:19:48  INFO         prequal p50=12000 p90=14400 p99=16700 p99.9=90700 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 19:19:48  INFO     [3/18] wrr load=83% target=104 qps workers=8 duration=240s
+2026-07-06 19:23:49  INFO         wrr p50=42100 p90=53600 p99=89300 p99.9=96500 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 19:23:49  INFO     [4/18] prequal load=83% target=104 qps workers=8 duration=240s
+2026-07-06 19:27:50  INFO         prequal p50=12000 p90=14500 p99=16900 p99.9=88300 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 19:27:50  INFO     [5/18] wrr load=93% target=116 qps workers=8 duration=240s
+2026-07-06 19:31:51  INFO         wrr p50=42000 p90=58100 p99=89900 p99.9=101800 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 19:31:51  INFO     [6/18] prequal load=93% target=116 qps workers=8 duration=240s
+2026-07-06 19:35:53  INFO         prequal p50=12000 p90=14500 p99=16500 p99.9=85200 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 19:35:53  INFO     [7/18] wrr load=103% target=129 qps workers=8 duration=240s
+2026-07-06 19:39:54  INFO         wrr p50=42100 p90=59600 p99=89600 p99.9=99700 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 19:39:54  INFO     [8/18] prequal load=103% target=129 qps workers=8 duration=240s
+2026-07-06 19:43:55  INFO         prequal p50=12000 p90=14500 p99=42300 p99.9=91200 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 19:43:55  INFO     [9/18] wrr load=114% target=142 qps workers=8 duration=240s
+2026-07-06 19:47:57  INFO         wrr p50=42100 p90=62700 p99=89700 p99.9=106200 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 19:47:57  INFO     [10/18] prequal load=114% target=142 qps workers=8 duration=240s
+2026-07-06 19:51:58  INFO         prequal p50=12100 p90=14500 p99=42800 p99.9=90400 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 19:51:58  INFO     [11/18] wrr load=127% target=159 qps workers=8 duration=240s
+2026-07-06 19:56:00  INFO         wrr p50=42400 p90=66000 p99=91300 p99.9=113100 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 19:56:00  INFO     [12/18] prequal load=127% target=159 qps workers=8 duration=240s
+2026-07-06 20:00:01  INFO         prequal p50=12100 p90=14500 p99=16900 p99.9=87000 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 20:00:01  INFO     [13/18] wrr load=141% target=176 qps workers=8 duration=240s
+2026-07-06 20:04:03  INFO         wrr p50=42400 p90=68200 p99=91500 p99.9=117400 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 20:04:03  INFO     [14/18] prequal load=141% target=176 qps workers=8 duration=240s
+2026-07-06 20:08:05  INFO         prequal p50=12000 p90=14400 p99=16100 p99.9=55000 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 20:08:05  INFO     [15/18] wrr load=157% target=196 qps workers=8 duration=240s
+2026-07-06 20:12:06  INFO         wrr p50=42500 p90=68500 p99=96100 p99.9=118900 usec (2xx only) | err=0.00% | err_qps=0.01
+2026-07-06 20:12:06  INFO     [16/18] prequal load=157% target=196 qps workers=8 duration=240s
+2026-07-06 20:16:08  INFO         prequal p50=11900 p90=14300 p99=15800 p99.9=17000 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 20:16:08  INFO     [17/18] wrr load=174% target=218 qps workers=8 duration=240s
+2026-07-06 20:20:10  INFO         wrr p50=40900 p90=65000 p99=91200 p99.9=114500 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 20:20:10  INFO     [18/18] prequal load=174% target=218 qps workers=8 duration=240s
+2026-07-06 20:24:12  INFO         prequal p50=11800 p90=14200 p99=15700 p99.9=16800 usec (2xx only) | err=0.00% | err_qps=0.00
+2026-07-06 20:24:20  INFO     plot -> /users/Mr_Gary/experiment1_scaling_results/servers_5/run_20260706_191100/experiment1_latency_errors_cpu.png
+2026-07-06 20:24:20  INFO     ======================================================================
+2026-07-06 20:24:20  INFO     EXPERIMENT 1 DONE. Everything is under: /users/Mr_Gary/experiment1_scaling_results/servers_5/run_20260706_191100
+2026-07-06 20:24:20  INFO     ======================================================================

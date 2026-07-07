@@ -1,0 +1,16 @@
+{
+  "source_run_dir": "/Users/gary/Downloads/loadbalancer-prequal/final/results_experiment1_scaling_20260707_030851/servers_20/run_20260706_213806",
+  "smooth_bins": 5,
+  "smoothed_fields": [
+    "p50_us",
+    "p90_us",
+    "p99_us",
+    "p99_9_us",
+    "avg_us",
+    "error_qps"
+  ],
+  "latency_mapping": "unchanged from experiment1: 2xx only",
+  "errors": "unchanged from experiment1: all non-2xx error_qps",
+  "plot": "experiment1_smoothed.png",
+  "timeseries": "timeseries_smoothed.csv"
+}

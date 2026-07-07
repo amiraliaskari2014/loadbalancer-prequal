@@ -1,0 +1,711 @@
+2026-07-05 14:52:11  INFO     ======================================================================
+2026-07-05 14:52:11  INFO     PREPARE | this node = lb | total backends = 20
+2026-07-05 14:52:11  INFO     Generating an inter-node SSH key on lb ...
+2026-07-05 14:52:11  INFO     Authorized the inter-node key via NFS-shared authorized_keys.
+2026-07-05 14:52:14  INFO     Inter-node SSH OK (reached bhost1).
+2026-07-05 14:52:14  INFO     backend hosts: ['bhost1', 'bhost2', 'bhost3', 'bhost4', 'bhost5', 'bhost6', 'bhost7', 'bhost8', 'bhost9', 'bhost10', 'bhost11', 'bhost12', 'bhost13', 'bhost14', 'bhost15', 'bhost16', 'bhost17', 'bhost18', 'bhost19', 'bhost20']
+2026-07-05 14:52:14  INFO     per-host=1  clean_step=2
+2026-07-05 14:52:14  INFO     LB_SERVERS has 20 backends (10 contended)
+2026-07-05 14:52:14  INFO     Setting up 23 nodes (parallel, jobs=8)... this takes a few minutes.
+2026-07-05 14:52:14  INFO     [bhost1] setup attempt 1 ...
+2026-07-05 14:52:14  INFO     [bhost2] setup attempt 1 ...
+2026-07-05 14:52:14  INFO     [bhost3] setup attempt 1 ...
+2026-07-05 14:52:14  INFO     [bhost4] setup attempt 1 ...
+2026-07-05 14:52:14  INFO     [bhost5] setup attempt 1 ...
+2026-07-05 14:52:14  INFO     [bhost6] setup attempt 1 ...
+2026-07-05 14:52:14  INFO     [bhost7] setup attempt 1 ...
+2026-07-05 14:52:14  INFO     [bhost8] setup attempt 1 ...
+2026-07-05 14:54:19  INFO     [bhost4] OK
+2026-07-05 14:54:19  DEBUG    [bhost4] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server4
++ sudo docker run -d --restart unless-stopped --name backend_server4 --network=host -e PORT=9001 -e SERVER_ID=server4 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 14:54:19  INFO     [bhost9] setup attempt 1 ...
+2026-07-05 14:54:20  INFO     [bhost2] OK
+2026-07-05 14:54:20  DEBUG    [bhost2] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server2
++ sudo docker run -d --restart unless-stopped --name backend_server2 --network=host -e PORT=9001 -e SERVER_ID=server2 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 14:54:20  INFO     [bhost10] setup attempt 1 ...
+2026-07-05 14:54:20  INFO     [bhost7] OK
+2026-07-05 14:54:20  DEBUG    [bhost7] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server7
++ sudo docker run -d --restart unless-stopped --name backend_server7 --network=host -e PORT=9001 -e SERVER_ID=server7 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 14:54:20  INFO     [bhost11] setup attempt 1 ...
+2026-07-05 14:54:22  INFO     [bhost8] OK
+2026-07-05 14:54:22  DEBUG    [bhost8] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server8
++ sudo docker run -d --restart unless-stopped --name backend_server8 --network=host -e PORT=9001 -e SERVER_ID=server8 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 14:54:22  INFO     [bhost12] setup attempt 1 ...
+2026-07-05 14:54:22  INFO     [bhost6] OK
+2026-07-05 14:54:22  DEBUG    [bhost6] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server6
++ sudo docker run -d --restart unless-stopped --name backend_server6 --network=host -e PORT=9001 -e SERVER_ID=server6 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 14:54:22  INFO     [bhost13] setup attempt 1 ...
+2026-07-05 14:54:24  INFO     [bhost5] OK
+2026-07-05 14:54:24  DEBUG    [bhost5] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server5
++ sudo docker run -d --restart unless-stopped --name backend_server5 --network=host -e PORT=9001 -e SERVER_ID=server5 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 14:54:24  INFO     [bhost14] setup attempt 1 ...
+2026-07-05 14:54:25  INFO     [bhost3] OK
+2026-07-05 14:54:25  DEBUG    [bhost3] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server3
++ sudo docker run -d --restart unless-stopped --name backend_server3 --network=host -e PORT=9001 -e SERVER_ID=server3 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 14:54:25  INFO     [bhost15] setup attempt 1 ...
+2026-07-05 14:54:26  INFO     [bhost1] OK
+2026-07-05 14:54:26  DEBUG    [bhost1] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server1
++ sudo docker run -d --restart unless-stopped --name backend_server1 --network=host -e PORT=9001 -e SERVER_ID=server1 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 14:54:26  INFO     [bhost16] setup attempt 1 ...
+2026-07-05 14:56:28  INFO     [bhost11] OK
+2026-07-05 14:56:28  DEBUG    [bhost11] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server11
++ sudo docker run -d --restart unless-stopped --name backend_server11 --network=host -e PORT=9001 -e SERVER_ID=server11 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 14:56:28  INFO     [bhost17] setup attempt 1 ...
+2026-07-05 14:56:28  INFO     [bhost10] OK
+2026-07-05 14:56:28  DEBUG    [bhost10] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server10
++ sudo docker run -d --restart unless-stopped --name backend_server10 --network=host -e PORT=9001 -e SERVER_ID=server10 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 14:56:28  INFO     [bhost18] setup attempt 1 ...
+2026-07-05 14:56:31  INFO     [bhost9] OK
+2026-07-05 14:56:31  DEBUG    [bhost9] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server9
++ sudo docker run -d --restart unless-stopped --name backend_server9 --network=host -e PORT=9001 -e SERVER_ID=server9 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 14:56:31  INFO     [bhost19] setup attempt 1 ...
+2026-07-05 14:56:31  INFO     [bhost13] OK
+2026-07-05 14:56:31  DEBUG    [bhost13] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server13
++ sudo docker run -d --restart unless-stopped --name backend_server13 --network=host -e PORT=9001 -e SERVER_ID=server13 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 14:56:31  INFO     [bhost20] setup attempt 1 ...
+2026-07-05 14:56:33  INFO     [bhost12] OK
+2026-07-05 14:56:33  DEBUG    [bhost12] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server12
++ sudo docker run -d --restart unless-stopped --name backend_server12 --network=host -e PORT=9001 -e SERVER_ID=server12 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 14:56:33  INFO     [lb] setup attempt 1 ...
+2026-07-05 14:56:34  INFO     [bhost14] OK
+2026-07-05 14:56:34  DEBUG    [bhost14] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server14
++ sudo docker run -d --restart unless-stopped --name backend_server14 --network=host -e PORT=9001 -e SERVER_ID=server14 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 14:56:34  INFO     [bgload] setup attempt 1 ...
+2026-07-05 14:56:35  INFO     [bhost15] OK
+2026-07-05 14:56:35  DEBUG    [bhost15] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server15
++ sudo docker run -d --restart unless-stopped --name backend_server15 --network=host -e PORT=9001 -e SERVER_ID=server15 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 14:56:35  INFO     [monitor] setup attempt 1 ...
+2026-07-05 14:56:37  INFO     [bhost16] OK
+2026-07-05 14:56:37  DEBUG    [bhost16] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server16
++ sudo docker run -d --restart unless-stopped --name backend_server16 --network=host -e PORT=9001 -e SERVER_ID=server16 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 14:58:16  INFO     [monitor] OK
+2026-07-05 14:58:16  DEBUG    [monitor] output tail:
+fe7e839e9954: Pull complete
+43862b0c980e: Pull complete
+Digest: sha256:7d5faae481a4c6f436c99e98af11534f7fd5e8d3e35213552dd1dd02bc393d2e
+Status: Downloaded newer image for grafana/grafana:10.4.2
+2026-07-05 14:58:33  INFO     [bhost18] OK
+2026-07-05 14:58:33  DEBUG    [bhost18] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server18
++ sudo docker run -d --restart unless-stopped --name backend_server18 --network=host -e PORT=9001 -e SERVER_ID=server18 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 14:58:36  INFO     [bhost19] OK
+2026-07-05 14:58:36  DEBUG    [bhost19] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server19
++ sudo docker run -d --restart unless-stopped --name backend_server19 --network=host -e PORT=9001 -e SERVER_ID=server19 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 14:58:37  INFO     [bhost17] OK
+2026-07-05 14:58:37  DEBUG    [bhost17] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server17
++ sudo docker run -d --restart unless-stopped --name backend_server17 --network=host -e PORT=9001 -e SERVER_ID=server17 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 14:58:39  INFO     [bhost20] OK
+2026-07-05 14:58:39  DEBUG    [bhost20] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server20
++ sudo docker run -d --restart unless-stopped --name backend_server20 --network=host -e PORT=9001 -e SERVER_ID=server20 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 14:59:03  INFO     [bgload] OK
+2026-07-05 14:59:03  DEBUG    [bgload] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f bgload
++ sudo docker run -d --restart unless-stopped --name bgload --network=host -e BG_TARGETS=10.10.1.1:9001,10.10.1.3:9001,10.10.1.5:9001,10.10.1.7:9001,10.10.1.9:9001,10.10.1.11:9001,10.10.1.13:9001,10.10.1.15:9001,10.10.1.17:9001,10.10.1.19:9001 -e BG_RATE=20 bgload
+2026-07-05 15:01:47  INFO     [lb] OK
+2026-07-05 15:01:47  DEBUG    [lb] output tail:
+  [200]	1 responses'
++ grep -q Requests/sec
++ echo 'hey OK'
++ sudo apt-get -o DPkg::Lock::Timeout=600 install -y python3 python3-pip python3-numpy python3-matplotlib
+2026-07-05 15:01:47  INFO     ----------------------------------------------------------------------
+2026-07-05 15:01:47  INFO     setup OK on: ['bhost4', 'bhost2', 'bhost7', 'bhost8', 'bhost6', 'bhost5', 'bhost3', 'bhost1', 'bhost11', 'bhost10', 'bhost9', 'bhost13', 'bhost12', 'bhost14', 'bhost15', 'bhost16', 'monitor', 'bhost18', 'bhost19', 'bhost17', 'bhost20', 'bgload', 'lb']
+2026-07-05 15:01:47  INFO     Verifying...
+2026-07-05 15:01:47  INFO       lb-prequal: UP
+2026-07-05 15:01:47  INFO       lb-weightedrr: UP
+2026-07-05 15:01:48  INFO       backends answering: 20 / 20
+2026-07-05 15:01:48  INFO     ======================================================================
+2026-07-05 15:01:48  INFO     PREPARE DONE. You can now run run_tests.py.
+2026-07-05 17:12:53  INFO     ======================================================================
+2026-07-05 17:12:53  INFO     PREPARE | this node = lb | total backends = 20
+2026-07-05 17:12:55  ERROR    Inter-node SSH to bhost1 still failing:
+Mr_Gary@bhost1: Permission denied (publickey).
+2026-07-05 17:12:55  ERROR    Fix: from your laptop run  ssh -A Mr_Gary@<lb-host>  (agent forwarding), or ensure your key is loaded (ssh-add) and retry.
+2026-07-05 17:14:56  INFO     ======================================================================
+2026-07-05 17:14:56  INFO     PREPARE | this node = lb | total backends = 20
+2026-07-05 17:14:59  INFO     Inter-node SSH OK (reached bhost1).
+2026-07-05 17:14:59  INFO     backend hosts: ['bhost1', 'bhost2', 'bhost3', 'bhost4', 'bhost5', 'bhost6', 'bhost7', 'bhost8', 'bhost9', 'bhost10', 'bhost11', 'bhost12', 'bhost13', 'bhost14', 'bhost15', 'bhost16', 'bhost17', 'bhost18', 'bhost19', 'bhost20']
+2026-07-05 17:14:59  INFO     per-host=1  clean_step=2
+2026-07-05 17:14:59  INFO     LB_SERVERS has 20 backends (10 contended)
+2026-07-05 17:14:59  INFO     Setting up 23 nodes (parallel, jobs=8)... this takes a few minutes.
+2026-07-05 17:14:59  INFO     [bhost1] setup attempt 1 ...
+2026-07-05 17:14:59  INFO     [bhost2] setup attempt 1 ...
+2026-07-05 17:14:59  INFO     [bhost3] setup attempt 1 ...
+2026-07-05 17:14:59  INFO     [bhost4] setup attempt 1 ...
+2026-07-05 17:14:59  INFO     [bhost5] setup attempt 1 ...
+2026-07-05 17:14:59  INFO     [bhost6] setup attempt 1 ...
+2026-07-05 17:14:59  INFO     [bhost7] setup attempt 1 ...
+2026-07-05 17:14:59  INFO     [bhost8] setup attempt 1 ...
+2026-07-05 17:15:14  INFO     [bhost6] OK
+2026-07-05 17:15:14  DEBUG    [bhost6] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server6
++ sudo docker run -d --restart unless-stopped --name backend_server6 --network=host -e PORT=9001 -e SERVER_ID=server6 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 17:15:14  INFO     [bhost9] setup attempt 1 ...
+2026-07-05 17:15:14  INFO     [bhost2] OK
+2026-07-05 17:15:14  DEBUG    [bhost2] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server2
++ sudo docker run -d --restart unless-stopped --name backend_server2 --network=host -e PORT=9001 -e SERVER_ID=server2 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 17:15:14  INFO     [bhost10] setup attempt 1 ...
+2026-07-05 17:15:14  INFO     [bhost8] OK
+2026-07-05 17:15:14  DEBUG    [bhost8] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server8
++ sudo docker run -d --restart unless-stopped --name backend_server8 --network=host -e PORT=9001 -e SERVER_ID=server8 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 17:15:14  INFO     [bhost11] setup attempt 1 ...
+2026-07-05 17:15:14  INFO     [bhost5] OK
+2026-07-05 17:15:14  DEBUG    [bhost5] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server5
++ sudo docker run -d --restart unless-stopped --name backend_server5 --network=host -e PORT=9001 -e SERVER_ID=server5 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 17:15:14  INFO     [bhost12] setup attempt 1 ...
+2026-07-05 17:15:14  INFO     [bhost4] OK
+2026-07-05 17:15:14  DEBUG    [bhost4] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server4
++ sudo docker run -d --restart unless-stopped --name backend_server4 --network=host -e PORT=9001 -e SERVER_ID=server4 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 17:15:14  INFO     [bhost13] setup attempt 1 ...
+2026-07-05 17:15:15  INFO     [bhost3] OK
+2026-07-05 17:15:15  DEBUG    [bhost3] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server3
++ sudo docker run -d --restart unless-stopped --name backend_server3 --network=host -e PORT=9001 -e SERVER_ID=server3 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 17:15:15  INFO     [bhost14] setup attempt 1 ...
+2026-07-05 17:15:15  INFO     [bhost1] OK
+2026-07-05 17:15:15  DEBUG    [bhost1] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server1
++ sudo docker run -d --restart unless-stopped --name backend_server1 --network=host -e PORT=9001 -e SERVER_ID=server1 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 17:15:15  INFO     [bhost15] setup attempt 1 ...
+2026-07-05 17:15:15  INFO     [bhost7] OK
+2026-07-05 17:15:15  DEBUG    [bhost7] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server7
++ sudo docker run -d --restart unless-stopped --name backend_server7 --network=host -e PORT=9001 -e SERVER_ID=server7 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 17:15:15  INFO     [bhost16] setup attempt 1 ...
+2026-07-05 17:15:29  INFO     [bhost11] OK
+2026-07-05 17:15:29  DEBUG    [bhost11] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server11
++ sudo docker run -d --restart unless-stopped --name backend_server11 --network=host -e PORT=9001 -e SERVER_ID=server11 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 17:15:29  INFO     [bhost17] setup attempt 1 ...
+2026-07-05 17:15:29  INFO     [bhost13] OK
+2026-07-05 17:15:29  DEBUG    [bhost13] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server13
++ sudo docker run -d --restart unless-stopped --name backend_server13 --network=host -e PORT=9001 -e SERVER_ID=server13 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 17:15:29  INFO     [bhost18] setup attempt 1 ...
+2026-07-05 17:15:30  INFO     [bhost12] OK
+2026-07-05 17:15:30  DEBUG    [bhost12] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server12
++ sudo docker run -d --restart unless-stopped --name backend_server12 --network=host -e PORT=9001 -e SERVER_ID=server12 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 17:15:30  INFO     [bhost19] setup attempt 1 ...
+2026-07-05 17:15:30  INFO     [bhost9] OK
+2026-07-05 17:15:30  DEBUG    [bhost9] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server9
++ sudo docker run -d --restart unless-stopped --name backend_server9 --network=host -e PORT=9001 -e SERVER_ID=server9 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 17:15:30  INFO     [bhost20] setup attempt 1 ...
+2026-07-05 17:15:30  INFO     [bhost10] OK
+2026-07-05 17:15:30  DEBUG    [bhost10] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server10
++ sudo docker run -d --restart unless-stopped --name backend_server10 --network=host -e PORT=9001 -e SERVER_ID=server10 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 17:15:30  INFO     [lb] setup attempt 1 ...
+2026-07-05 17:15:30  INFO     [bhost16] OK
+2026-07-05 17:15:30  DEBUG    [bhost16] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server16
++ sudo docker run -d --restart unless-stopped --name backend_server16 --network=host -e PORT=9001 -e SERVER_ID=server16 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 17:15:30  INFO     [bgload] setup attempt 1 ...
+2026-07-05 17:15:31  INFO     [bhost14] OK
+2026-07-05 17:15:31  DEBUG    [bhost14] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server14
++ sudo docker run -d --restart unless-stopped --name backend_server14 --network=host -e PORT=9001 -e SERVER_ID=server14 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 17:15:31  INFO     [monitor] setup attempt 1 ...
+2026-07-05 17:15:31  INFO     [bhost15] OK
+2026-07-05 17:15:31  DEBUG    [bhost15] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server15
++ sudo docker run -d --restart unless-stopped --name backend_server15 --network=host -e PORT=9001 -e SERVER_ID=server15 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 17:15:44  INFO     [bhost17] OK
+2026-07-05 17:15:44  DEBUG    [bhost17] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server17
++ sudo docker run -d --restart unless-stopped --name backend_server17 --network=host -e PORT=9001 -e SERVER_ID=server17 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 17:15:45  INFO     [bhost18] OK
+2026-07-05 17:15:45  DEBUG    [bhost18] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server18
++ sudo docker run -d --restart unless-stopped --name backend_server18 --network=host -e PORT=9001 -e SERVER_ID=server18 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 17:15:45  INFO     [bhost20] OK
+2026-07-05 17:15:45  DEBUG    [bhost20] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server20
++ sudo docker run -d --restart unless-stopped --name backend_server20 --network=host -e PORT=9001 -e SERVER_ID=server20 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-05 17:15:45  INFO     [bhost19] OK
+2026-07-05 17:15:45  DEBUG    [bhost19] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server19
++ sudo docker run -d --restart unless-stopped --name backend_server19 --network=host -e PORT=9001 -e SERVER_ID=server19 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-05 17:15:46  INFO     [monitor] OK
+2026-07-05 17:15:46  DEBUG    [monitor] output tail:
++ sudo sed -i 's|http://prometheus:9090|http://localhost:9090|g' config/grafana/provisioning/datasources/datasource.yml
++ sudo docker rm -f prometheus grafana
++ sudo docker run -d --restart unless-stopped --name prometheus --network=host -v /opt/prequal/config/prometheus:/etc/prometheus:ro prom/prometheus:v2.51.0 --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus
++ sudo docker run -d --restart unless-stopped --name grafana --network=host -e GF_SECURITY_ADMIN_PASSWORD=admin -e GF_USERS_ALLOW_SIGN_UP=false -e GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/loadbalancer.json -v /opt/prequal/config/grafana/provisioning:/etc/grafana/provisioning:ro -v /opt/prequal/config/grafana/dashboards:/var/lib/grafana/dashboards:ro grafana/grafana:10.4.2
+2026-07-05 17:15:48  INFO     [bgload] OK
+2026-07-05 17:15:48  DEBUG    [bgload] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f bgload
++ sudo docker run -d --restart unless-stopped --name bgload --network=host -e BG_TARGETS=10.10.1.1:9001,10.10.1.3:9001,10.10.1.5:9001,10.10.1.7:9001,10.10.1.9:9001,10.10.1.11:9001,10.10.1.13:9001,10.10.1.15:9001,10.10.1.17:9001,10.10.1.19:9001 -e BG_RATE=20 bgload
+2026-07-05 17:16:28  INFO     [lb] OK
+2026-07-05 17:16:28  DEBUG    [lb] output tail:
+  [200]	1 responses'
++ grep -q Requests/sec
++ echo 'hey OK'
++ sudo apt-get -o DPkg::Lock::Timeout=600 install -y python3 python3-pip python3-numpy python3-matplotlib
+2026-07-05 17:16:28  INFO     ----------------------------------------------------------------------
+2026-07-05 17:16:28  INFO     setup OK on: ['bhost6', 'bhost2', 'bhost8', 'bhost5', 'bhost4', 'bhost3', 'bhost1', 'bhost7', 'bhost11', 'bhost13', 'bhost12', 'bhost9', 'bhost10', 'bhost16', 'bhost14', 'bhost15', 'bhost17', 'bhost18', 'bhost20', 'bhost19', 'monitor', 'bgload', 'lb']
+2026-07-05 17:16:28  INFO     Verifying...
+2026-07-05 17:16:28  INFO       lb-prequal: UP
+2026-07-05 17:16:28  INFO       lb-weightedrr: UP
+2026-07-05 17:16:29  INFO       backends answering: 20 / 20
+2026-07-05 17:16:29  INFO     ======================================================================
+2026-07-05 17:16:29  INFO     PREPARE DONE. You can now run run_tests.py.
+2026-07-06 12:51:29  INFO     ======================================================================
+2026-07-06 12:51:29  INFO     PREPARE | this node = lb | total backends = 20
+2026-07-06 12:51:33  INFO     Inter-node SSH OK (reached bhost1).
+2026-07-06 12:51:33  INFO     backend hosts: ['bhost1', 'bhost2', 'bhost3', 'bhost4', 'bhost5', 'bhost6', 'bhost7', 'bhost8', 'bhost9', 'bhost10', 'bhost11', 'bhost12', 'bhost13', 'bhost14', 'bhost15', 'bhost16', 'bhost17', 'bhost18', 'bhost19', 'bhost20']
+2026-07-06 12:51:33  INFO     per-host=1  clean_step=2
+2026-07-06 12:51:33  INFO     LB_SERVERS has 20 backends (10 contended)
+2026-07-06 12:51:33  INFO     Setting up 23 nodes (parallel, jobs=8)... this takes a few minutes.
+2026-07-06 12:51:33  INFO     [bhost1] setup attempt 1 ...
+2026-07-06 12:51:33  INFO     [bhost2] setup attempt 1 ...
+2026-07-06 12:51:33  INFO     [bhost3] setup attempt 1 ...
+2026-07-06 12:51:33  INFO     [bhost4] setup attempt 1 ...
+2026-07-06 12:51:33  INFO     [bhost5] setup attempt 1 ...
+2026-07-06 12:51:33  INFO     [bhost6] setup attempt 1 ...
+2026-07-06 12:51:33  INFO     [bhost7] setup attempt 1 ...
+2026-07-06 12:51:33  INFO     [bhost8] setup attempt 1 ...
+2026-07-06 12:52:00  INFO     [bhost7] OK
+2026-07-06 12:52:00  DEBUG    [bhost7] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server7
++ sudo docker run -d --restart unless-stopped --name backend_server7 --network=host -e PORT=9001 -e SERVER_ID=server7 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 12:52:00  INFO     [bhost9] setup attempt 1 ...
+2026-07-06 12:52:00  INFO     [bhost1] OK
+2026-07-06 12:52:00  DEBUG    [bhost1] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server1
++ sudo docker run -d --restart unless-stopped --name backend_server1 --network=host -e PORT=9001 -e SERVER_ID=server1 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 12:52:00  INFO     [bhost10] setup attempt 1 ...
+2026-07-06 12:52:01  INFO     [bhost6] OK
+2026-07-06 12:52:01  DEBUG    [bhost6] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server6
++ sudo docker run -d --restart unless-stopped --name backend_server6 --network=host -e PORT=9001 -e SERVER_ID=server6 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 12:52:01  INFO     [bhost11] setup attempt 1 ...
+2026-07-06 12:52:01  INFO     [bhost5] OK
+2026-07-06 12:52:01  DEBUG    [bhost5] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server5
++ sudo docker run -d --restart unless-stopped --name backend_server5 --network=host -e PORT=9001 -e SERVER_ID=server5 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 12:52:01  INFO     [bhost12] setup attempt 1 ...
+2026-07-06 12:52:01  INFO     [bhost8] OK
+2026-07-06 12:52:01  DEBUG    [bhost8] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server8
++ sudo docker run -d --restart unless-stopped --name backend_server8 --network=host -e PORT=9001 -e SERVER_ID=server8 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 12:52:01  INFO     [bhost13] setup attempt 1 ...
+2026-07-06 12:52:01  INFO     [bhost2] OK
+2026-07-06 12:52:01  DEBUG    [bhost2] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server2
++ sudo docker run -d --restart unless-stopped --name backend_server2 --network=host -e PORT=9001 -e SERVER_ID=server2 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 12:52:01  INFO     [bhost14] setup attempt 1 ...
+2026-07-06 12:52:01  INFO     [bhost3] OK
+2026-07-06 12:52:01  DEBUG    [bhost3] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server3
++ sudo docker run -d --restart unless-stopped --name backend_server3 --network=host -e PORT=9001 -e SERVER_ID=server3 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 12:52:01  INFO     [bhost15] setup attempt 1 ...
+2026-07-06 12:52:01  INFO     [bhost4] OK
+2026-07-06 12:52:01  DEBUG    [bhost4] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server4
++ sudo docker run -d --restart unless-stopped --name backend_server4 --network=host -e PORT=9001 -e SERVER_ID=server4 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 12:52:01  INFO     [bhost16] setup attempt 1 ...
+2026-07-06 12:52:27  INFO     [bhost9] OK
+2026-07-06 12:52:27  DEBUG    [bhost9] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server9
++ sudo docker run -d --restart unless-stopped --name backend_server9 --network=host -e PORT=9001 -e SERVER_ID=server9 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 12:52:27  INFO     [bhost17] setup attempt 1 ...
+2026-07-06 12:52:27  INFO     [bhost11] OK
+2026-07-06 12:52:27  DEBUG    [bhost11] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server11
++ sudo docker run -d --restart unless-stopped --name backend_server11 --network=host -e PORT=9001 -e SERVER_ID=server11 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 12:52:27  INFO     [bhost18] setup attempt 1 ...
+2026-07-06 12:52:27  INFO     [bhost12] OK
+2026-07-06 12:52:27  DEBUG    [bhost12] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server12
++ sudo docker run -d --restart unless-stopped --name backend_server12 --network=host -e PORT=9001 -e SERVER_ID=server12 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 12:52:27  INFO     [bhost19] setup attempt 1 ...
+2026-07-06 12:52:27  INFO     [bhost13] OK
+2026-07-06 12:52:27  DEBUG    [bhost13] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server13
++ sudo docker run -d --restart unless-stopped --name backend_server13 --network=host -e PORT=9001 -e SERVER_ID=server13 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 12:52:27  INFO     [bhost20] setup attempt 1 ...
+2026-07-06 12:52:28  INFO     [bhost14] OK
+2026-07-06 12:52:28  DEBUG    [bhost14] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server14
++ sudo docker run -d --restart unless-stopped --name backend_server14 --network=host -e PORT=9001 -e SERVER_ID=server14 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 12:52:28  INFO     [lb] setup attempt 1 ...
+2026-07-06 12:52:28  INFO     [bhost10] OK
+2026-07-06 12:52:28  DEBUG    [bhost10] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server10
++ sudo docker run -d --restart unless-stopped --name backend_server10 --network=host -e PORT=9001 -e SERVER_ID=server10 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 12:52:28  INFO     [bgload] setup attempt 1 ...
+2026-07-06 12:52:28  INFO     [bhost16] OK
+2026-07-06 12:52:28  DEBUG    [bhost16] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server16
++ sudo docker run -d --restart unless-stopped --name backend_server16 --network=host -e PORT=9001 -e SERVER_ID=server16 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 12:52:28  INFO     [monitor] setup attempt 1 ...
+2026-07-06 12:52:29  INFO     [bhost15] OK
+2026-07-06 12:52:29  DEBUG    [bhost15] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server15
++ sudo docker run -d --restart unless-stopped --name backend_server15 --network=host -e PORT=9001 -e SERVER_ID=server15 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 12:52:54  INFO     [bhost20] OK
+2026-07-06 12:52:54  DEBUG    [bhost20] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server20
++ sudo docker run -d --restart unless-stopped --name backend_server20 --network=host -e PORT=9001 -e SERVER_ID=server20 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 12:52:54  INFO     [bhost18] OK
+2026-07-06 12:52:54  DEBUG    [bhost18] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server18
++ sudo docker run -d --restart unless-stopped --name backend_server18 --network=host -e PORT=9001 -e SERVER_ID=server18 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 12:52:55  INFO     [bhost17] OK
+2026-07-06 12:52:55  DEBUG    [bhost17] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server17
++ sudo docker run -d --restart unless-stopped --name backend_server17 --network=host -e PORT=9001 -e SERVER_ID=server17 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 12:52:55  INFO     [bhost19] OK
+2026-07-06 12:52:55  DEBUG    [bhost19] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server19
++ sudo docker run -d --restart unless-stopped --name backend_server19 --network=host -e PORT=9001 -e SERVER_ID=server19 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 12:52:55  INFO     [bgload] OK
+2026-07-06 12:52:55  DEBUG    [bgload] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f bgload
++ sudo docker run -d --restart unless-stopped --name bgload --network=host -e BG_TARGETS=10.10.1.1:9001,10.10.1.3:9001,10.10.1.5:9001,10.10.1.7:9001,10.10.1.9:9001,10.10.1.11:9001,10.10.1.13:9001,10.10.1.15:9001,10.10.1.17:9001,10.10.1.19:9001 -e BG_RATE=20 bgload
+2026-07-06 12:52:56  INFO     [monitor] OK
+2026-07-06 12:52:56  DEBUG    [monitor] output tail:
++ sudo sed -i 's|http://prometheus:9090|http://localhost:9090|g' config/grafana/provisioning/datasources/datasource.yml
++ sudo docker rm -f prometheus grafana
++ sudo docker run -d --restart unless-stopped --name prometheus --network=host -v /opt/prequal/config/prometheus:/etc/prometheus:ro prom/prometheus:v2.51.0 --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus
++ sudo docker run -d --restart unless-stopped --name grafana --network=host -e GF_SECURITY_ADMIN_PASSWORD=admin -e GF_USERS_ALLOW_SIGN_UP=false -e GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/loadbalancer.json -v /opt/prequal/config/grafana/provisioning:/etc/grafana/provisioning:ro -v /opt/prequal/config/grafana/dashboards:/var/lib/grafana/dashboards:ro grafana/grafana:10.4.2
+2026-07-06 12:53:35  INFO     [lb] OK
+2026-07-06 12:53:35  DEBUG    [lb] output tail:
+  [200]	1 responses'
++ grep -q Requests/sec
++ echo 'hey OK'
++ sudo apt-get -o DPkg::Lock::Timeout=600 install -y python3 python3-pip python3-numpy python3-matplotlib
+2026-07-06 12:53:35  INFO     ----------------------------------------------------------------------
+2026-07-06 12:53:35  INFO     setup OK on: ['bhost7', 'bhost1', 'bhost6', 'bhost5', 'bhost8', 'bhost2', 'bhost3', 'bhost4', 'bhost9', 'bhost11', 'bhost12', 'bhost13', 'bhost14', 'bhost10', 'bhost16', 'bhost15', 'bhost20', 'bhost18', 'bhost17', 'bhost19', 'bgload', 'monitor', 'lb']
+2026-07-06 12:53:35  INFO     Verifying...
+2026-07-06 12:53:35  INFO       lb-prequal: UP
+2026-07-06 12:53:35  INFO       lb-weightedrr: UP
+2026-07-06 12:53:36  INFO       backends answering: 20 / 20
+2026-07-06 12:53:36  INFO     ======================================================================
+2026-07-06 12:53:36  INFO     PREPARE DONE. You can now run run_tests.py.
+2026-07-06 19:08:58  INFO     ======================================================================
+2026-07-06 19:08:58  INFO     PREPARE | this node = lb | total backends = 20
+2026-07-06 19:09:02  INFO     Inter-node SSH OK (reached bhost1).
+2026-07-06 19:09:02  INFO     backend hosts: ['bhost1', 'bhost2', 'bhost3', 'bhost4', 'bhost5', 'bhost6', 'bhost7', 'bhost8', 'bhost9', 'bhost10', 'bhost11', 'bhost12', 'bhost13', 'bhost14', 'bhost15', 'bhost16', 'bhost17', 'bhost18', 'bhost19', 'bhost20']
+2026-07-06 19:09:02  INFO     per-host=1  clean_step=2
+2026-07-06 19:09:02  INFO     LB_SERVERS has 20 backends (10 contended)
+2026-07-06 19:09:02  INFO     Setting up 23 nodes (parallel, jobs=8)... this takes a few minutes.
+2026-07-06 19:09:02  INFO     [bhost1] setup attempt 1 ...
+2026-07-06 19:09:02  INFO     [bhost2] setup attempt 1 ...
+2026-07-06 19:09:02  INFO     [bhost3] setup attempt 1 ...
+2026-07-06 19:09:02  INFO     [bhost4] setup attempt 1 ...
+2026-07-06 19:09:02  INFO     [bhost5] setup attempt 1 ...
+2026-07-06 19:09:02  INFO     [bhost6] setup attempt 1 ...
+2026-07-06 19:09:02  INFO     [bhost7] setup attempt 1 ...
+2026-07-06 19:09:02  INFO     [bhost8] setup attempt 1 ...
+2026-07-06 19:09:25  INFO     [bhost5] OK
+2026-07-06 19:09:25  DEBUG    [bhost5] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server5
++ sudo docker run -d --restart unless-stopped --name backend_server5 --network=host -e PORT=9001 -e SERVER_ID=server5 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 19:09:25  INFO     [bhost9] setup attempt 1 ...
+2026-07-06 19:09:26  INFO     [bhost6] OK
+2026-07-06 19:09:26  DEBUG    [bhost6] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server6
++ sudo docker run -d --restart unless-stopped --name backend_server6 --network=host -e PORT=9001 -e SERVER_ID=server6 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 19:09:26  INFO     [bhost10] setup attempt 1 ...
+2026-07-06 19:09:26  INFO     [bhost8] OK
+2026-07-06 19:09:26  DEBUG    [bhost8] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server8
++ sudo docker run -d --restart unless-stopped --name backend_server8 --network=host -e PORT=9001 -e SERVER_ID=server8 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 19:09:26  INFO     [bhost11] setup attempt 1 ...
+2026-07-06 19:09:26  INFO     [bhost3] OK
+2026-07-06 19:09:26  DEBUG    [bhost3] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server3
++ sudo docker run -d --restart unless-stopped --name backend_server3 --network=host -e PORT=9001 -e SERVER_ID=server3 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 19:09:26  INFO     [bhost12] setup attempt 1 ...
+2026-07-06 19:09:26  INFO     [bhost7] OK
+2026-07-06 19:09:26  DEBUG    [bhost7] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server7
++ sudo docker run -d --restart unless-stopped --name backend_server7 --network=host -e PORT=9001 -e SERVER_ID=server7 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 19:09:26  INFO     [bhost13] setup attempt 1 ...
+2026-07-06 19:09:26  INFO     [bhost2] OK
+2026-07-06 19:09:26  DEBUG    [bhost2] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server2
++ sudo docker run -d --restart unless-stopped --name backend_server2 --network=host -e PORT=9001 -e SERVER_ID=server2 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 19:09:26  INFO     [bhost14] setup attempt 1 ...
+2026-07-06 19:09:26  INFO     [bhost1] OK
+2026-07-06 19:09:26  DEBUG    [bhost1] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server1
++ sudo docker run -d --restart unless-stopped --name backend_server1 --network=host -e PORT=9001 -e SERVER_ID=server1 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 19:09:26  INFO     [bhost15] setup attempt 1 ...
+2026-07-06 19:09:26  INFO     [bhost4] OK
+2026-07-06 19:09:26  DEBUG    [bhost4] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server4
++ sudo docker run -d --restart unless-stopped --name backend_server4 --network=host -e PORT=9001 -e SERVER_ID=server4 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 19:09:26  INFO     [bhost16] setup attempt 1 ...
+2026-07-06 19:09:50  INFO     [bhost11] OK
+2026-07-06 19:09:50  DEBUG    [bhost11] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server11
++ sudo docker run -d --restart unless-stopped --name backend_server11 --network=host -e PORT=9001 -e SERVER_ID=server11 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 19:09:50  INFO     [bhost17] setup attempt 1 ...
+2026-07-06 19:09:50  INFO     [bhost9] OK
+2026-07-06 19:09:50  DEBUG    [bhost9] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server9
++ sudo docker run -d --restart unless-stopped --name backend_server9 --network=host -e PORT=9001 -e SERVER_ID=server9 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 19:09:50  INFO     [bhost18] setup attempt 1 ...
+2026-07-06 19:09:50  INFO     [bhost12] OK
+2026-07-06 19:09:50  DEBUG    [bhost12] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server12
++ sudo docker run -d --restart unless-stopped --name backend_server12 --network=host -e PORT=9001 -e SERVER_ID=server12 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 19:09:50  INFO     [bhost19] setup attempt 1 ...
+2026-07-06 19:09:50  INFO     [bhost13] OK
+2026-07-06 19:09:50  DEBUG    [bhost13] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server13
++ sudo docker run -d --restart unless-stopped --name backend_server13 --network=host -e PORT=9001 -e SERVER_ID=server13 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 19:09:50  INFO     [bhost20] setup attempt 1 ...
+2026-07-06 19:09:50  INFO     [bhost10] OK
+2026-07-06 19:09:50  DEBUG    [bhost10] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server10
++ sudo docker run -d --restart unless-stopped --name backend_server10 --network=host -e PORT=9001 -e SERVER_ID=server10 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 19:09:50  INFO     [lb] setup attempt 1 ...
+2026-07-06 19:09:50  INFO     [bhost14] OK
+2026-07-06 19:09:50  DEBUG    [bhost14] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server14
++ sudo docker run -d --restart unless-stopped --name backend_server14 --network=host -e PORT=9001 -e SERVER_ID=server14 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 19:09:50  INFO     [bgload] setup attempt 1 ...
+2026-07-06 19:09:50  INFO     [bhost15] OK
+2026-07-06 19:09:50  DEBUG    [bhost15] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server15
++ sudo docker run -d --restart unless-stopped --name backend_server15 --network=host -e PORT=9001 -e SERVER_ID=server15 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 19:09:50  INFO     [monitor] setup attempt 1 ...
+2026-07-06 19:09:51  INFO     [bhost16] OK
+2026-07-06 19:09:51  DEBUG    [bhost16] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server16
++ sudo docker run -d --restart unless-stopped --name backend_server16 --network=host -e PORT=9001 -e SERVER_ID=server16 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 19:10:14  INFO     [bhost20] OK
+2026-07-06 19:10:14  DEBUG    [bhost20] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server20
++ sudo docker run -d --restart unless-stopped --name backend_server20 --network=host -e PORT=9001 -e SERVER_ID=server20 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 19:10:14  INFO     [bhost18] OK
+2026-07-06 19:10:14  DEBUG    [bhost18] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server18
++ sudo docker run -d --restart unless-stopped --name backend_server18 --network=host -e PORT=9001 -e SERVER_ID=server18 -e CPU_LOAD=0 -e MAX_CONCURRENCY=20 backend
+2026-07-06 19:10:14  INFO     [bhost17] OK
+2026-07-06 19:10:14  DEBUG    [bhost17] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server17
++ sudo docker run -d --restart unless-stopped --name backend_server17 --network=host -e PORT=9001 -e SERVER_ID=server17 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 19:10:14  INFO     [bgload] OK
+2026-07-06 19:10:14  DEBUG    [bgload] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f bgload
++ sudo docker run -d --restart unless-stopped --name bgload --network=host -e BG_TARGETS=10.10.1.1:9001,10.10.1.3:9001,10.10.1.5:9001,10.10.1.7:9001,10.10.1.9:9001,10.10.1.11:9001,10.10.1.13:9001,10.10.1.15:9001,10.10.1.17:9001,10.10.1.19:9001 -e BG_RATE=20 bgload
+2026-07-06 19:10:14  INFO     [bhost19] OK
+2026-07-06 19:10:14  DEBUG    [bhost19] output tail:
+            https://docs.docker.com/go/buildx/
+
++ sudo docker rm -f backend_server19
++ sudo docker run -d --restart unless-stopped --name backend_server19 --network=host -e PORT=9001 -e SERVER_ID=server19 -e CPU_LOAD=60 -e MAX_CONCURRENCY=3 backend
+2026-07-06 19:10:15  INFO     [monitor] OK
+2026-07-06 19:10:15  DEBUG    [monitor] output tail:
++ sudo sed -i 's|http://prometheus:9090|http://localhost:9090|g' config/grafana/provisioning/datasources/datasource.yml
++ sudo docker rm -f prometheus grafana
++ sudo docker run -d --restart unless-stopped --name prometheus --network=host -v /opt/prequal/config/prometheus:/etc/prometheus:ro prom/prometheus:v2.51.0 --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus
++ sudo docker run -d --restart unless-stopped --name grafana --network=host -e GF_SECURITY_ADMIN_PASSWORD=admin -e GF_USERS_ALLOW_SIGN_UP=false -e GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/loadbalancer.json -v /opt/prequal/config/grafana/provisioning:/etc/grafana/provisioning:ro -v /opt/prequal/config/grafana/dashboards:/var/lib/grafana/dashboards:ro grafana/grafana:10.4.2
+2026-07-06 19:10:56  INFO     [lb] OK
+2026-07-06 19:10:56  DEBUG    [lb] output tail:
+  [200]	1 responses'
++ grep -q Requests/sec
++ echo 'hey OK'
++ sudo apt-get -o DPkg::Lock::Timeout=600 install -y python3 python3-pip python3-numpy python3-matplotlib
+2026-07-06 19:10:56  INFO     ----------------------------------------------------------------------
+2026-07-06 19:10:56  INFO     setup OK on: ['bhost5', 'bhost6', 'bhost8', 'bhost3', 'bhost7', 'bhost2', 'bhost1', 'bhost4', 'bhost11', 'bhost9', 'bhost12', 'bhost13', 'bhost10', 'bhost14', 'bhost15', 'bhost16', 'bhost20', 'bhost18', 'bhost17', 'bgload', 'bhost19', 'monitor', 'lb']
+2026-07-06 19:10:56  INFO     Verifying...
+2026-07-06 19:10:56  INFO       lb-prequal: UP
+2026-07-06 19:10:56  INFO       lb-weightedrr: UP
+2026-07-06 19:10:56  INFO       backends answering: 20 / 20
+2026-07-06 19:10:56  INFO     ======================================================================
+2026-07-06 19:10:56  INFO     PREPARE DONE. You can now run run_tests.py.

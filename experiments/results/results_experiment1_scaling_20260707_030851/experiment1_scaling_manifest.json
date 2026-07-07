@@ -1,0 +1,16 @@
+{
+  "root": "/Users/gary/Downloads/loadbalancer-prequal/final/results_experiment1_scaling_20260707_030851",
+  "runs": {
+    "5": "/Users/gary/Downloads/loadbalancer-prequal/final/results_experiment1_scaling_20260707_030851/servers_5/run_20260706_191100",
+    "10": "/Users/gary/Downloads/loadbalancer-prequal/final/results_experiment1_scaling_20260707_030851/servers_10/run_20260706_202422",
+    "20": "/Users/gary/Downloads/loadbalancer-prequal/final/results_experiment1_scaling_20260707_030851/servers_20/run_20260706_213806"
+  },
+  "summary_csv": "experiment1_scaling_error_summary.csv",
+  "aggregate_csv": "experiment1_scaling_error_by_servers.csv",
+  "plot_png": "experiment1_scaling_errors.png",
+  "plot_pdf": "experiment1_scaling_errors.pdf",
+  "by_servers_plot_png": "experiment1_scaling_error_by_servers.png",
+  "by_servers_plot_pdf": "experiment1_scaling_error_by_servers.pdf",
+  "by_servers_linear_log_plot_png": "experiment1_scaling_error_by_servers_linear_log.png",
+  "by_servers_linear_log_plot_pdf": "experiment1_scaling_error_by_servers_linear_log.pdf"
+}

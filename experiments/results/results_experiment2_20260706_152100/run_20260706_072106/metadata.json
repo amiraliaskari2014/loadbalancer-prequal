@@ -1,0 +1,26 @@
+{
+  "mode": "experiment2_probe_rate",
+  "servers": 20,
+  "per_server_qps": 25,
+  "load": 1.5,
+  "probe_rates": [
+    4.0,
+    2.8284271247461903,
+    2.0,
+    1.4142135623730951,
+    1.0,
+    0.7071067811865476,
+    0.5
+  ],
+  "step_seconds": 240,
+  "bin_seconds": 5,
+  "workers": 30,
+  "warmup": 15,
+  "qrif": 0.84,
+  "rif_sample_interval": 0.5,
+  "latency_percentiles": "2xx responses only",
+  "rif_source": "lb_server_rif gauge sampled from lb-prequal /metrics",
+  "limitation": "current LB truncates LB_PROBE_RATE to int(rate) for async per-query probes",
+  "started": "20260706_072106",
+  "finished": "20260706_075250"
+}

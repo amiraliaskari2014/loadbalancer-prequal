@@ -1,0 +1,2 @@
+hey -z 240s -q 26.1333 -c 15 -o csv http://localhost:8080
+

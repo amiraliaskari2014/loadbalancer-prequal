@@ -1,0 +1,38 @@
+2026-07-06 07:21:06  INFO     ======================================================================
+2026-07-06 07:21:06  INFO     EXPERIMENT 2 | probe-rate sweep | servers=20 | load=1.50x | target=750 qps
+2026-07-06 07:21:06  INFO     rates=['4', '2.828', '2', '1.414', '1', '0.7071', '0.5'] | step=240s | warmup=15s | output=/users/Mr_Gary/experiment2_results/run_20260706_072106
+2026-07-06 07:21:06  WARNING  Repo limitation: LB_PROBE_RATE is currently truncated to int(rate); fractional rates are not paper-exact.
+2026-07-06 07:21:06  INFO     ======================================================================
+2026-07-06 07:21:07  INFO     [1/7] probe_rate=4 effective_async_probes=4
+2026-07-06 07:21:16  INFO         warming up 15s at target=750 qps ...
+2026-07-06 07:21:31  INFO         measuring target=750 qps workers=30 duration=240s
+2026-07-06 07:25:38  INFO         p99=60000 p99.9=90200 usec (2xx only) | err=0.000% | err_qps=0.000
+2026-07-06 07:25:38  INFO     [2/7] probe_rate=2sqrt2 effective_async_probes=2
+2026-07-06 07:25:47  INFO         warming up 15s at target=750 qps ...
+2026-07-06 07:26:02  INFO         measuring target=750 qps workers=30 duration=240s
+2026-07-06 07:30:10  INFO         p99=58300 p99.9=88800 usec (2xx only) | err=0.000% | err_qps=0.000
+2026-07-06 07:30:10  INFO     [3/7] probe_rate=2 effective_async_probes=2
+2026-07-06 07:30:19  INFO         warming up 15s at target=750 qps ...
+2026-07-06 07:30:34  INFO         measuring target=750 qps workers=30 duration=240s
+2026-07-06 07:34:41  INFO         p99=59600 p99.9=88900 usec (2xx only) | err=0.000% | err_qps=0.000
+2026-07-06 07:34:41  INFO     [4/7] probe_rate=sqrt2 effective_async_probes=1
+2026-07-06 07:34:50  INFO         warming up 15s at target=750 qps ...
+2026-07-06 07:35:05  INFO         measuring target=750 qps workers=30 duration=240s
+2026-07-06 07:39:12  INFO         p99=88300 p99.9=105100 usec (2xx only) | err=0.008% | err_qps=0.058
+2026-07-06 07:39:12  INFO     [5/7] probe_rate=1 effective_async_probes=1
+2026-07-06 07:39:21  INFO         warming up 15s at target=750 qps ...
+2026-07-06 07:39:36  INFO         measuring target=750 qps workers=30 duration=240s
+2026-07-06 07:43:43  INFO         p99=87900 p99.9=104100 usec (2xx only) | err=0.006% | err_qps=0.046
+2026-07-06 07:43:43  INFO     [6/7] probe_rate=sqrt1/2 effective_async_probes=0
+2026-07-06 07:43:52  INFO         warming up 15s at target=750 qps ...
+2026-07-06 07:44:07  INFO         measuring target=750 qps workers=30 duration=240s
+2026-07-06 07:48:14  INFO         p99=98200 p99.9=121600 usec (2xx only) | err=0.036% | err_qps=0.246
+2026-07-06 07:48:14  INFO     [7/7] probe_rate=1/2 effective_async_probes=0
+2026-07-06 07:48:23  INFO         warming up 15s at target=750 qps ...
+2026-07-06 07:48:38  INFO         measuring target=750 qps workers=30 duration=240s
+2026-07-06 07:52:45  INFO         p99=97900 p99.9=122200 usec (2xx only) | err=0.053% | err_qps=0.362
+2026-07-06 07:52:45  INFO     Restoring lb-prequal LB_PROBE_RATE=2.0
+2026-07-06 07:52:50  INFO     plot -> /users/Mr_Gary/experiment2_results/run_20260706_072106/experiment2_probe_rate.png
+2026-07-06 07:52:50  INFO     ======================================================================
+2026-07-06 07:52:50  INFO     EXPERIMENT 2 DONE. Everything is under: /users/Mr_Gary/experiment2_results/run_20260706_072106
+2026-07-06 07:52:50  INFO     ======================================================================

@@ -1,0 +1,30 @@
+{
+  "mode": "experiment1_load_ramp",
+  "topology": "cloudlab_profile: one physical backend node per backend server",
+  "servers": 10,
+  "per_server_qps": 25,
+  "loads": [
+    0.75,
+    0.83,
+    0.93,
+    1.03,
+    1.14,
+    1.27,
+    1.41,
+    1.57,
+    1.74
+  ],
+  "step_seconds": 240,
+  "bin_seconds": 5,
+  "workers": 15,
+  "order": [
+    "wrr",
+    "prequal"
+  ],
+  "latency_percentiles": "2xx responses only",
+  "errors": "all non-2xx responses",
+  "host_cpu": true,
+  "hostname": "lb.test9.networkcomputing.emulab.net",
+  "started": "20260706_202422",
+  "finished": "20260706_213803"
+}

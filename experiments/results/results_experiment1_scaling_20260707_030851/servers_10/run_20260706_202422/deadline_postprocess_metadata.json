@@ -1,0 +1,9 @@
+{
+  "source_run_dir": "/Users/gary/Downloads/loadbalancer-prequal/final/results_experiment1_scaling_20260707_030851/servers_10/run_20260706_202422",
+  "deadline_us": 5000000.0,
+  "bin_seconds": 5,
+  "smooth_bins": 5,
+  "latency_mapping": "2xx real latency; non-2xx mapped to deadline_us",
+  "raw_plot": "experiment1_deadline_raw.png",
+  "smoothed_plot": "experiment1_deadline_smoothed.png"
+}
