@@ -603,25 +603,25 @@ export SSH_OPTS="-A -o ForwardAgent=yes -o IdentitiesOnly=yes -i $HOME/.ssh/clou
 Run the main 20-server load ramp:
 
 ```bash
-bash experiment1.sh Mr_Gary@<lb-host>
+bash experiment1.sh <username>@<lb-host>
 ```
 
 Run the 5/10/20-server scaling experiment:
 
 ```bash
-bash experiment1_scaling.sh Mr_Gary@<lb-host>
+bash experiment1_scaling.sh <username>@<lb-host>
 ```
 
 Run the probe-rate sweep:
 
 ```bash
-bash experiment2.sh Mr_Gary@<lb-host>
+bash experiment2.sh <username>@<lb-host>
 ```
 
 Run the QRIF threshold sweep:
 
 ```bash
-bash experiment3.sh Mr_Gary@<lb-host>
+bash experiment3.sh <username>@<lb-host>
 ```
 
 If the CloudLab nodes have already been prepared and containers are still

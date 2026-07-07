@@ -109,19 +109,19 @@ export SSH_OPTS="-A -o ForwardAgent=yes -o IdentitiesOnly=yes \
 Run the main experiments:
 
 ```bash
-bash experiment1.sh Mr_Gary@<lb-host>
-bash experiment1_scaling.sh Mr_Gary@<lb-host>
-bash experiment2.sh Mr_Gary@<lb-host>
-bash experiment3.sh Mr_Gary@<lb-host>
+bash experiment1.sh <username>@<lb-host>
+bash experiment1_scaling.sh <username>@<lb-host>
+bash experiment2.sh <username>@<lb-host>
+bash experiment3.sh <username>@<lb-host>
 ```
 
 If the CloudLab containers are already prepared and still running, skip setup:
 
 ```bash
-SKIP_PREPARE=1 bash experiment1.sh Mr_Gary@<lb-host>
-SKIP_PREPARE=1 bash experiment1_scaling.sh Mr_Gary@<lb-host>
-SKIP_PREPARE=1 bash experiment2.sh Mr_Gary@<lb-host>
-SKIP_PREPARE=1 bash experiment3.sh Mr_Gary@<lb-host>
+SKIP_PREPARE=1 bash experiment1.sh <username>@<lb-host>
+SKIP_PREPARE=1 bash experiment1_scaling.sh <username>@<lb-host>
+SKIP_PREPARE=1 bash experiment2.sh <username>@<lb-host>
+SKIP_PREPARE=1 bash experiment3.sh <username>@<lb-host>
 ```
 
 Results are copied back automatically to:
@@ -152,7 +152,7 @@ Default settings:
 Run:
 
 ```bash
-bash experiment1.sh Mr_Gary@<lb-host>
+bash experiment1.sh <username>@<lb-host>
 ```
 
 ### Experiment 1 Scaling
@@ -171,7 +171,7 @@ Default worker scaling:
 Run:
 
 ```bash
-bash experiment1_scaling.sh Mr_Gary@<lb-host>
+bash experiment1_scaling.sh <username>@<lb-host>
 ```
 
 ### Experiment 2: Probe Rate Sweep
@@ -185,7 +185,7 @@ Runs a fixed-load Prequal experiment while sweeping the probe rate:
 Run:
 
 ```bash
-bash experiment2.sh Mr_Gary@<lb-host>
+bash experiment2.sh <username>@<lb-host>
 ```
 
 ### Experiment 3: RIF Limit Threshold Sweep
@@ -196,7 +196,7 @@ control toward latency-only control.
 Run:
 
 ```bash
-bash experiment3.sh Mr_Gary@<lb-host>
+bash experiment3.sh <username>@<lb-host>
 ```
 
 ## Post-Processing

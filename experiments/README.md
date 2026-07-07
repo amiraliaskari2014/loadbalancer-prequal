@@ -31,19 +31,19 @@ From this `experiments/` folder, after creating a CloudLab experiment with
 `cloudlab_profile.py`:
 
 ```bash
-bash experiment1.sh Mr_Gary@<lb-host>
-bash experiment1_scaling.sh Mr_Gary@<lb-host>
-bash experiment2.sh Mr_Gary@<lb-host>
-bash experiment3.sh Mr_Gary@<lb-host>
+bash experiment1.sh <username>@<lb-host>
+bash experiment1_scaling.sh <username>@<lb-host>
+bash experiment2.sh <username>@<lb-host>
+bash experiment3.sh <username>@<lb-host>
 ```
 
 If containers are already prepared and still running:
 
 ```bash
-SKIP_PREPARE=1 bash experiment1.sh Mr_Gary@<lb-host>
-SKIP_PREPARE=1 bash experiment1_scaling.sh Mr_Gary@<lb-host>
-SKIP_PREPARE=1 bash experiment2.sh Mr_Gary@<lb-host>
-SKIP_PREPARE=1 bash experiment3.sh Mr_Gary@<lb-host>
+SKIP_PREPARE=1 bash experiment1.sh <username>@<lb-host>
+SKIP_PREPARE=1 bash experiment1_scaling.sh <username>@<lb-host>
+SKIP_PREPARE=1 bash experiment2.sh <username>@<lb-host>
+SKIP_PREPARE=1 bash experiment3.sh <username>@<lb-host>
 ```
 
 Defaults are `TOTAL=20`, `SERVERS=20`, `PER_SERVER_QPS=25`, and `WORKERS=30`
