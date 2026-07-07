@@ -13,6 +13,5 @@ venv/
 .vscode/
 *.swp
 
-# Logs and temporary files
-*.log
+# Temporary files
 *.tmp
