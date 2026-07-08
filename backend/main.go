@@ -53,7 +53,7 @@ func (lb *latencyBuckets) record(rif int32, latencyMs int64) {
 }
 
 func (lb *latencyBuckets) medianAtRIF(rif int32) int64 {
-	bucketIndex := rif
+	bucketIndex := int(rif)
 	if bucketIndex >= 32 {
 		bucketIndex = 31
 	}
@@ -63,6 +63,22 @@ func (lb *latencyBuckets) medianAtRIF(rif int32) int64 {
 	<-lb.mu
 	samples := make([]int64, len(lb.buckets[bucketIndex]))
 	copy(samples, lb.buckets[bucketIndex])
+	if len(samples) == 0 {
+		for distance := 1; distance < len(lb.buckets); distance++ {
+			lower := bucketIndex - distance
+			upper := bucketIndex + distance
+			if lower >= 0 && len(lb.buckets[lower]) > 0 {
+				samples = make([]int64, len(lb.buckets[lower]))
+				copy(samples, lb.buckets[lower])
+				break
+			}
+			if upper < len(lb.buckets) && len(lb.buckets[upper]) > 0 {
+				samples = make([]int64, len(lb.buckets[upper]))
+				copy(samples, lb.buckets[upper])
+				break
+			}
+		}
+	}
 	lb.mu <- struct{}{}
 	if len(samples) == 0 {
 		return 0
@@ -168,11 +184,14 @@ func main() {
 		arrivalRIF := atomic.AddInt32(&serverRIF, 1)
 		arrivalRIF--
 		start := time.Now()
+		recordSuccessfulLatency := false
 
 		defer func() {
 			atomic.AddInt32(&serverRIF, -1)
-			latencyMs := time.Since(start).Milliseconds()
-			buckets.record(arrivalRIF, latencyMs)
+			if recordSuccessfulLatency {
+				latencyMs := time.Since(start).Milliseconds()
+				buckets.record(arrivalRIF, latencyMs)
+			}
 		}()
 
 		// Count RIF before queueing so overload replies still expose pressure.
@@ -205,6 +224,7 @@ func main() {
 		setRIFHeaders(w, arrivalRIF)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
+		recordSuccessfulLatency = true
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"server_id":         serverID,
 			"duration_ms":       duration.Milliseconds(),
