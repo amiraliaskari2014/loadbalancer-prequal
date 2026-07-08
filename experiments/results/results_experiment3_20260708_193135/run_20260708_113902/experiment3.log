@@ -1,0 +1,67 @@
+2026-07-08 11:39:02  INFO     ======================================================================
+2026-07-08 11:39:02  INFO     EXPERIMENT 3 | RIF-limit sweep | servers=20 | load=0.75x | target=1125 qps
+2026-07-08 11:39:02  INFO     qrifs=['0', '.35', '.39', '.43', '.48', '.53', '.59', '.66', '.73', '.81', '.90', '.99', '.999', '1.0'] | probe_rate=3 | step=240s | warmup=15s | output=/users/Mr_Gary/experiment3_results/run_20260708_113902
+2026-07-08 11:39:02  INFO     QRIF=0 is passed through exactly as RIF-only control.
+2026-07-08 11:39:02  INFO     ======================================================================
+2026-07-08 11:39:03  INFO     Starting host CPU sampler for ['bhost1', 'bhost2', 'bhost3', 'bhost4', 'bhost5', 'bhost6', 'bhost7', 'bhost8', 'bhost9', 'bhost10', 'bhost11', 'bhost12', 'bhost13', 'bhost14', 'bhost15', 'bhost16', 'bhost17', 'bhost18', 'bhost19', 'bhost20'] every 5s...
+2026-07-08 11:39:03  INFO     [1/14] QRIF=0 runtime=0
+2026-07-08 11:39:13  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 11:39:28  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 11:43:38  INFO         p90=94300 p99=137700 usec (2xx only) | err=0.166% | err_qps=1.871
+2026-07-08 11:43:38  INFO     [2/14] QRIF=.35 runtime=0.35
+2026-07-08 11:43:48  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 11:44:03  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 11:48:13  INFO         p90=94200 p99=137100 usec (2xx only) | err=0.145% | err_qps=1.629
+2026-07-08 11:48:13  INFO     [3/14] QRIF=.39 runtime=0.39
+2026-07-08 11:48:22  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 11:48:38  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 11:52:48  INFO         p90=94800 p99=138900 usec (2xx only) | err=0.173% | err_qps=1.942
+2026-07-08 11:52:48  INFO     [4/14] QRIF=.43 runtime=0.43
+2026-07-08 11:52:58  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 11:53:13  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 11:57:24  INFO         p90=94500 p99=137700 usec (2xx only) | err=0.148% | err_qps=1.667
+2026-07-08 11:57:24  INFO     [5/14] QRIF=.48 runtime=0.48
+2026-07-08 11:57:33  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 11:57:48  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 12:01:59  INFO         p90=94300 p99=137300 usec (2xx only) | err=0.168% | err_qps=1.892
+2026-07-08 12:01:59  INFO     [6/14] QRIF=.53 runtime=0.53
+2026-07-08 12:02:08  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 12:02:23  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 12:06:34  INFO         p90=94300 p99=137400 usec (2xx only) | err=0.145% | err_qps=1.629
+2026-07-08 12:06:34  INFO     [7/14] QRIF=.59 runtime=0.59
+2026-07-08 12:06:44  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 12:06:59  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 12:11:09  INFO         p90=94400 p99=137700 usec (2xx only) | err=0.191% | err_qps=2.154
+2026-07-08 12:11:09  INFO     [8/14] QRIF=.66 runtime=0.66
+2026-07-08 12:11:19  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 12:11:34  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 12:15:45  INFO         p90=94400 p99=137500 usec (2xx only) | err=0.183% | err_qps=2.054
+2026-07-08 12:15:45  INFO     [9/14] QRIF=.73 runtime=0.73
+2026-07-08 12:15:54  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 12:16:09  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 12:20:20  INFO         p90=94400 p99=138000 usec (2xx only) | err=0.194% | err_qps=2.188
+2026-07-08 12:20:20  INFO     [10/14] QRIF=.81 runtime=0.81
+2026-07-08 12:20:29  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 12:20:44  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 12:24:55  INFO         p90=94000 p99=137400 usec (2xx only) | err=0.120% | err_qps=1.350
+2026-07-08 12:24:55  INFO     [11/14] QRIF=.90 runtime=0.9
+2026-07-08 12:25:04  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 12:25:19  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 12:29:30  INFO         p90=94100 p99=137500 usec (2xx only) | err=0.157% | err_qps=1.762
+2026-07-08 12:29:30  INFO     [12/14] QRIF=.99 runtime=0.99
+2026-07-08 12:29:40  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 12:29:55  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 12:34:06  INFO         p90=94200 p99=137800 usec (2xx only) | err=0.180% | err_qps=2.025
+2026-07-08 12:34:06  INFO     [13/14] QRIF=.999 runtime=0.999
+2026-07-08 12:34:15  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 12:34:30  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 12:38:41  INFO         p90=94200 p99=137400 usec (2xx only) | err=0.210% | err_qps=2.358
+2026-07-08 12:38:41  INFO     [14/14] QRIF=1.0 runtime=1
+2026-07-08 12:38:50  INFO         warming up 15s at target=1125 qps ...
+2026-07-08 12:39:05  INFO         measuring target=1125 qps workers=120 duration=240s
+2026-07-08 12:43:16  INFO         p90=93900 p99=137000 usec (2xx only) | err=0.193% | err_qps=2.167
+2026-07-08 12:43:16  INFO     Restoring lb-prequal LB_QRIF=0.84 LB_PROBE_RATE=3.0
+2026-07-08 12:43:28  INFO     plot -> /users/Mr_Gary/experiment3_results/run_20260708_113902/experiment3_rif_limit.png
+2026-07-08 12:43:28  INFO     ======================================================================
+2026-07-08 12:43:28  INFO     EXPERIMENT 3 DONE. Everything is under: /users/Mr_Gary/experiment3_results/run_20260708_113902
+2026-07-08 12:43:28  INFO     ======================================================================
