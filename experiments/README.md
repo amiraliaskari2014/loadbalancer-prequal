@@ -7,14 +7,10 @@ This folder contains the clean experiment set for the 20-host CloudLab profile.
 - `cloudlab_profile.py`: CloudLab profile, creates `bhost1..bhost20`, `lb`, `bgload`, and `monitor`.
 - `prepare.py`: clones the app repo, builds Docker images, and starts services
   for the load-ramp/background-load experiments.
-- `prepare_experiment3.py`: paper-style Figure 9 setup with no bgload,
-  odd-numbered fast replicas, and even-numbered 2x-work slow replicas.
 - `common.py`: shared helper code used by the experiments.
 - `experiment1.py` / `experiment1.sh`: fixed WRR vs Prequal load-ramp experiment.
 - `experiment1_scaling.sh` / `experiment1_scaling_plot.py`: runs Experiment 1 at 5, 10, and 20 servers, then plots scaling errors.
 - `experiment2.py` / `experiment2.sh`: probe-rate sweep.
-- `experiment3.py` / `experiment3.sh`: RIF-limit threshold sweep using the
-  dedicated fast/slow Experiment 3 prepare script by default.
 - `postprocess_smooth.py`: optional smoothing for Experiment 1 outputs.
 - `postprocess_deadline.py`: optional paper-style 5s deadline post-processing.
 
@@ -38,7 +34,6 @@ From this `experiments/` folder, after creating a CloudLab experiment with
 bash experiment1.sh <username>@<lb-host>
 bash experiment1_scaling.sh <username>@<lb-host>
 bash experiment2.sh <username>@<lb-host>
-bash experiment3.sh <username>@<lb-host>
 ```
 
 If containers are already prepared and still running:
@@ -47,7 +42,6 @@ If containers are already prepared and still running:
 SKIP_PREPARE=1 bash experiment1.sh <username>@<lb-host>
 SKIP_PREPARE=1 bash experiment1_scaling.sh <username>@<lb-host>
 SKIP_PREPARE=1 bash experiment2.sh <username>@<lb-host>
-SKIP_PREPARE=1 bash experiment3.sh <username>@<lb-host>
 ```
 
 Defaults are `TOTAL=20`, `SERVERS=20`, `PER_SERVER_QPS=25`, and `WORKERS=30`
@@ -64,7 +58,3 @@ results/results_experiment1_scaling_<timestamp>/
   servers_20/run_.../
   experiment1_scaling_errors.png
 ```
-
-Experiment 3 intentionally uses different defaults: `PER_SERVER_QPS=75`,
-`WORKERS=120`, and `PROBE_RATE=3`. Its runner calls
-`prepare_experiment3.py` unless `PREPARE_SCRIPT` is overridden.

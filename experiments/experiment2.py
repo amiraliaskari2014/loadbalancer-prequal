@@ -20,6 +20,7 @@ import logging
 import math
 import os
 import re
+import statistics
 import sys
 import threading
 import time
@@ -306,7 +307,7 @@ def reconfigure_prequal(full_servers, n, probe_rate, qrif):
         raise RuntimeError("failed to recreate %s: %s" % (name, out.strip()))
 
 
-def smooth_by_phase(rows, fields, window):
+def smooth_by_phase(rows, fields, window, method="mean"):
     if window <= 1:
         return [dict(r) for r in rows]
     out = [dict(r) for r in rows]
@@ -324,12 +325,43 @@ def smooth_by_phase(rows, fields, window):
                 lo = max(0, local_i - half)
                 hi = min(len(vals), local_i + half + 1)
                 chunk = [v for v in vals[lo:hi] if not math.isnan(v)]
-                out[idx][field] = (sum(chunk) / len(chunk)) if chunk else None
+                if not chunk:
+                    out[idx][field] = None
+                elif method == "median":
+                    out[idx][field] = statistics.median(chunk)
+                else:
+                    out[idx][field] = sum(chunk) / len(chunk)
     return out
 
 
 def parse_ts(s):
     return dt.datetime.fromisoformat(s)
+
+
+def trim_phase_edges(rows, phases, edge_seconds):
+    if edge_seconds <= 0:
+        return [dict(r) for r in rows]
+
+    edge = dt.timedelta(seconds=edge_seconds)
+    bounds = {}
+    for phase in phases:
+        start = parse_ts(phase["started"])
+        end = parse_ts(phase["ended"])
+        if start + edge < end - edge:
+            bounds[str(phase["phase"])] = (start + edge, end - edge)
+        else:
+            bounds[str(phase["phase"])] = (start, end)
+
+    trimmed = []
+    for row in rows:
+        phase_bounds = bounds.get(str(row.get("phase")))
+        if not phase_bounds:
+            trimmed.append(dict(row))
+            continue
+        ts = parse_ts(row["timestamp"])
+        if phase_bounds[0] <= ts <= phase_bounds[1]:
+            trimmed.append(dict(row))
+    return trimmed
 
 
 def plot_experiment(rows, phases, rif_rows, outdir, args):
@@ -345,8 +377,10 @@ def plot_experiment(rows, phases, rif_rows, outdir, args):
 
     plot_rows = smooth_by_phase(rows, ("p99_us", "p99_9_us"),
                                 args.smooth_bins)
-    plot_rif = smooth_by_phase(rif_rows, ("rif_p99", "rif_p90", "rif_p50",
-                                          "rif_limit"),
+    rif_for_plot = trim_phase_edges(rif_rows, phases,
+                                    args.rif_edge_trim_seconds)
+    plot_rif = smooth_by_phase(rif_for_plot, ("rif_p99", "rif_p90", "rif_p50",
+                                              "rif_limit"),
                                args.rif_smooth_samples)
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8), sharex=True,
@@ -450,6 +484,7 @@ def main():
     ap.add_argument("--rif-sample-interval", type=float, default=0.5)
     ap.add_argument("--smooth-bins", type=int, default=9)
     ap.add_argument("--rif-smooth-samples", type=int, default=60)
+    ap.add_argument("--rif-edge-trim-seconds", type=float, default=12.0)
     ap.add_argument("--prequal-url", default="http://localhost:8080")
     ap.add_argument("--outdir", default="experiment2_results")
     ap.add_argument("--no-restore", action="store_true")
@@ -481,6 +516,7 @@ def main():
         "warmup": args.warmup,
         "qrif": args.qrif,
         "rif_sample_interval": args.rif_sample_interval,
+        "rif_edge_trim_seconds": args.rif_edge_trim_seconds,
         "latency_percentiles": "2xx responses only",
         "rif_source": "lb_server_rif gauge sampled from lb-prequal /metrics",
         "limitation": "current LB truncates LB_PROBE_RATE to int(rate) for async per-query probes",

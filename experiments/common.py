@@ -5,7 +5,7 @@ Shared helpers for the CloudLab experiment scripts.
 
 This module also keeps a standalone stepped-load runner for quick debugging,
 but the main user-facing experiments are experiment1.py, experiment2.py, and
-experiment3.py.
+the Experiment 1 scaling runner.
 """
 
 import argparse

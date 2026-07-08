@@ -16,7 +16,6 @@ Node layout:
 Run with:
   bash experiment1.sh <user>@<lb-hostname>
   bash experiment2.sh <user>@<lb-hostname>
-  bash experiment3.sh <user>@<lb-hostname>
 
 Because prepare.py discovers bhost* nodes and TOTAL=20, it will place exactly
 one backend container on each backend node.

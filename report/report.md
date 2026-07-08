@@ -74,29 +74,17 @@ lower.
   <p><b>Figure 1:</b> Paper Figure 6, the load ramp experiment. Gray windows are WRR; white windows are Prequal. The paper uses a 5 second request deadline, so the latency plot tops out at 5,000,000 microseconds.</p>
 </center>
 
-We also attempted the two parameter studies from the paper's Figure 8 and
-Figure 9. Figure 8 studies Prequal's probe rate. Figure 9 studies the QRIF
-threshold that separates hot and cold replicas in the HCL rule. These two
-figures help explain why Prequal works, while Figure 6 is the central
-end-to-end comparison.
+We also attempted the parameter study from the paper's Figure 8, which studies
+Prequal's probe rate. This helps explain one of the main tuning parameters
+behind Prequal, while Figure 6 remains the central end-to-end comparison.
 
 <center>
-  <div style="display:inline-block; width:43%; vertical-align:top;">
-    <img
-      alt="Paper Figure 8 probe-rate experiment"
-      src="figures/paper_plot_experiment2.png"
-      style="width:100%;"
-      />
-    <p><b>Figure 2:</b> Paper Figure 8, probe-rate sensitivity.</p>
-  </div>
-  <div style="display:inline-block; width:43%; padding-left:1em; vertical-align:top;">
-    <img
-      alt="Paper Figure 9 RIF limit threshold experiment"
-      src="figures/paper_plot_experiment3.png"
-      style="width:100%;"
-      />
-    <p><b>Figure 3:</b> Paper Figure 9, QRIF threshold sensitivity.</p>
-  </div>
+  <img
+    alt="Paper Figure 8 probe-rate experiment"
+    src="figures/paper_plot_experiment2.png"
+    style="width:50%;"
+    />
+  <p><b>Figure 2:</b> Paper Figure 8, probe-rate sensitivity.</p>
 </center>
 
 # 3. Environment Setup
@@ -146,7 +134,6 @@ The experiment harness is in `experiments/`:
 - `experiment1_scaling.sh` and `experiment1_scaling_plot.py` run the load ramp
   at 5, 10, and 20 backend scales and plot scaling-error behavior.
 - `experiment2.py` and `experiment2.sh` run the probe-rate sweep.
-- `experiment3.py` and `experiment3.sh` run the QRIF threshold sweep.
 - `postprocess_smooth.py` builds smoothed 2xx-only latency plots.
 - `postprocess_deadline.py` builds paper-style deadline plots by mapping
   non-2xx responses to a synthetic 5 second latency.
@@ -382,39 +369,6 @@ the periodic background prober still runs. This means our Experiment 2 is a
 useful sensitivity test for this implementation, but it is not an exact
 fractional-probing reproduction of the paper.
 
-## 4.5 Experiment 3: RIF Limit Threshold Sweep
-
-The paper's Figure 9 varies QRIF from 0 to 1.0 while introducing heterogeneous
-fast and slow replicas. As QRIF rises, the HCL rule shifts from RIF-heavy
-control toward latency-heavy control. The paper shows that latency improves as
-the system uses more latency information, but pure latency control becomes
-unstable because it ignores RIF as a leading signal.
-
-Our Experiment 3 uses the same QRIF sequence on 20 servers at 0.75x load:
-0, .35, .39, .43, .48, .53, .59, .66, .73, .81, .90, .99, .999, and 1.0.
-Each phase runs for 240 seconds. The implementation also works around a local
-configuration edge case: exact `LB_QRIF=0` is treated as an unset default in the
-balancer constructor, so the experiment runs the zero point as `1e-9`.
-
-<center>
-  <img
-    alt="Our RIF limit threshold sweep showing stable latency over QRIF values"
-    src="figures/experiment3_rif_limit.png"
-    style="width:82%;"
-    />
-  <p><b>Figure 7:</b> Our QRIF threshold sweep at 20 servers and 0.75x load.</p>
-</center>
-
-This run does not reproduce the paper's strong QRIF tradeoff. Our p90 remains
-near 52 ms, p99 near 90 ms, and p99.9 near 99-102 ms across the entire sweep.
-The likely reason is that our reproduction does not include the paper's
-fast/slow-replica workload for this experiment. The paper artificially makes
-half the replicas 2x slower, creating a meaningful latency-vs-RIF routing
-tradeoff. Our current backend has clean and contended replicas, but not a
-controlled 2x fast/slow split for Experiment 3. Therefore this figure validates
-the QRIF sweep harness and RIF instrumentation, but it should not be interpreted
-as a successful reproduction of the paper's Figure 9 trend.
-
 # 5. Further Exploration
 
 The additional research question we explored is: how does the WRR-vs-Prequal
@@ -448,7 +402,7 @@ The per-scale raw and deadline-smoothed plots are shown below.
       src="figures/experiment1_smoothed_s5.png"
       style="width:100%;"
       />
-    <p><b>Figure 8:</b> 5-server raw semantics.</p>
+    <p><b>Figure 7:</b> 5-server raw semantics.</p>
   </div>
   <div style="display:inline-block; width:30%; padding-left:1em; vertical-align:top;">
     <img
@@ -456,7 +410,7 @@ The per-scale raw and deadline-smoothed plots are shown below.
       src="figures/experiment1_smoothed_s10.png"
       style="width:100%;"
       />
-    <p><b>Figure 9:</b> 10-server raw semantics.</p>
+    <p><b>Figure 8:</b> 10-server raw semantics.</p>
   </div>
   <div style="display:inline-block; width:30%; padding-left:1em; vertical-align:top;">
     <img
@@ -464,7 +418,7 @@ The per-scale raw and deadline-smoothed plots are shown below.
       src="figures/experiment1_smoothed_s20.png"
       style="width:100%;"
       />
-    <p><b>Figure 10:</b> 20-server raw semantics.</p>
+    <p><b>Figure 9:</b> 20-server raw semantics.</p>
   </div>
 </center>
 
@@ -475,7 +429,7 @@ The per-scale raw and deadline-smoothed plots are shown below.
       src="figures/experiment1_deadline_smoothed_s5.png"
       style="width:100%;"
       />
-    <p><b>Figure 11:</b> 5-server deadline post-processing.</p>
+    <p><b>Figure 10:</b> 5-server deadline post-processing.</p>
   </div>
   <div style="display:inline-block; width:30%; padding-left:1em; vertical-align:top;">
     <img
@@ -483,7 +437,7 @@ The per-scale raw and deadline-smoothed plots are shown below.
       src="figures/experiment1_deadline_smoothed_s10.png"
       style="width:100%;"
       />
-    <p><b>Figure 12:</b> 10-server deadline post-processing.</p>
+    <p><b>Figure 11:</b> 10-server deadline post-processing.</p>
   </div>
   <div style="display:inline-block; width:30%; padding-left:1em; vertical-align:top;">
     <img
@@ -491,7 +445,7 @@ The per-scale raw and deadline-smoothed plots are shown below.
       src="figures/experiment1_deadline_smoothed_s20.png"
       style="width:100%;"
       />
-    <p><b>Figure 13:</b> 20-server deadline post-processing.</p>
+    <p><b>Figure 12:</b> 20-server deadline post-processing.</p>
   </div>
 </center>
 
@@ -506,7 +460,7 @@ non-2xx responses versus 12 Prequal non-2xx responses.
     src="figures/experiment1_scaling_errors.png"
     style="width:75%;"
     />
-  <p><b>Figure 14:</b> Error QPS by load level for 5, 10, and 20 servers.</p>
+  <p><b>Figure 13:</b> Error QPS by load level for 5, 10, and 20 servers.</p>
 </center>
 
 <center>
@@ -515,7 +469,7 @@ non-2xx responses versus 12 Prequal non-2xx responses.
     src="figures/experiment1_scaling_error_by_servers_linear_log.png"
     style="width:88%;"
     />
-  <p><b>Figure 15:</b> Mean error QPS versus number of servers. Point labels show total non-2xx responses.</p>
+  <p><b>Figure 14:</b> Mean error QPS versus number of servers. Point labels show total non-2xx responses.</p>
 </center>
 
 | Servers | Policy | Total responses | Non-2xx responses | Mean error QPS | Overall error rate |
@@ -538,8 +492,8 @@ more 503 responses under high load.
 
 The paper is strong conceptually, but not fully reproducible from the text
 alone. It clearly explains the main ideas, parameters, and experimental trends:
-the load levels in Figure 6, the probe-rate values in Figure 8, the QRIF values
-in Figure 9, the 100-client/100-server testbed, the 5 second deadline, and the
+the load levels in Figure 6, the probe-rate values in Figure 8, the
+100-client/100-server testbed, the 5 second deadline, and the
 allocation-normalized CPU interpretation. These details were enough to design a
 faithful scaled-down experiment.
 
@@ -553,17 +507,12 @@ not available externally:
   not available in CloudLab.
 - The paper's monitoring and histogram pipeline affects how RIF and CPU
   quantiles are visualized.
-- The Figure 9 fast/slow replica setup is described in the paper, but our
-  project would need an additional backend feature to reproduce it exactly.
-
 As a result, the most reproducible part of the paper is the mechanism and the
 shape of the controlled experiments, not the absolute numbers. Our project
 reproduces the central direction of Figure 6: Prequal reduces errors and tail
 latency under overload compared with WRR. It also reproduces the probe-rate
 insight qualitatively, with the caveat that our current implementation truncates
-fractional probe rates. It does not reproduce Figure 9's latency-vs-RIF
-crossover because our backend does not yet implement the paper's 2x fast/slow
-replica split for that experiment.
+fractional probe rates.
 
 # 7. Conclusion
 
@@ -616,12 +565,6 @@ Run the probe-rate sweep:
 
 ```bash
 bash experiment2.sh <username>@<lb-host>
-```
-
-Run the QRIF threshold sweep:
-
-```bash
-bash experiment3.sh <username>@<lb-host>
 ```
 
 If the CloudLab nodes have already been prepared and containers are still

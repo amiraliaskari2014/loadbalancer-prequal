@@ -112,7 +112,6 @@ Run the main experiments:
 bash experiment1.sh <username>@<lb-host>
 bash experiment1_scaling.sh <username>@<lb-host>
 bash experiment2.sh <username>@<lb-host>
-bash experiment3.sh <username>@<lb-host>
 ```
 
 If the CloudLab containers are already prepared and still running, skip setup:
@@ -121,7 +120,6 @@ If the CloudLab containers are already prepared and still running, skip setup:
 SKIP_PREPARE=1 bash experiment1.sh <username>@<lb-host>
 SKIP_PREPARE=1 bash experiment1_scaling.sh <username>@<lb-host>
 SKIP_PREPARE=1 bash experiment2.sh <username>@<lb-host>
-SKIP_PREPARE=1 bash experiment3.sh <username>@<lb-host>
 ```
 
 Results are copied back automatically to:
@@ -188,26 +186,6 @@ Run:
 bash experiment2.sh <username>@<lb-host>
 ```
 
-### Experiment 3: RIF Limit Threshold Sweep
-
-Runs a fixed-load Prequal experiment while sweeping `QRIF` from RIF-heavy
-control toward latency-only control. This experiment uses
-`experiments/prepare_experiment3.py`, which disables bgload and creates the
-paper-style fast/slow split: odd-numbered replicas are fast, even-numbered
-replicas do 2x query work.
-
-Default settings:
-
-- `PER_SERVER_QPS=75`
-- `WORKERS=120`
-- `PROBE_RATE=3`
-
-Run:
-
-```bash
-bash experiment3.sh <username>@<lb-host>
-```
-
 ## Post-Processing
 
 Experiment 1 has optional post-processing helpers:
@@ -227,7 +205,6 @@ The final written report is in:
 
 ```text
 report/report.md
-report/report.pdf
 ```
 
 Figures are stored in:
@@ -236,11 +213,12 @@ Figures are stored in:
 report/figures/
 ```
 
-The PDF was generated with `md2pdf`.
+The PDF can be regenerated from `report/report.md` with `md2pdf` when its
+native dependencies are installed.
 
 ## Notes
 
-- CloudLab runs build Docker images on the remote nodes from this repository.
+- CloudLab builds Docker images on the remote nodes from this repository.
 - `experiments/prepare.py` also builds the `hey` load generator from
   `https://github.com/rakyll/hey`.
 - The WRR policy here is a local baseline for comparison. It is not a full
