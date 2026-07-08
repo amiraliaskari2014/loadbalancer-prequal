@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-// serverRIF counts all live backend requests, including probes and direct load.
+// serverRIF counts live query requests. Health probes read it without changing it.
 var serverRIF int32
 
 // concSem models active CPU capacity; concQueue models bounded backlog pressure.
@@ -91,6 +91,24 @@ func main() {
 			cpuLoad = n
 		}
 	}
+	workMultiplier := 1.0
+	if v := os.Getenv("WORK_MULTIPLIER"); v != "" {
+		if n, err := strconv.ParseFloat(v, 64); err == nil && n > 0 {
+			workMultiplier = n
+		}
+	}
+	workBaseIterations := 500
+	if v := os.Getenv("WORK_BASE_ITERATIONS"); v != "" {
+		if n, err := strconv.Atoi(v); err == nil && n > 0 {
+			workBaseIterations = n
+		}
+	}
+	workJitterIterations := 500
+	if v := os.Getenv("WORK_JITTER_ITERATIONS"); v != "" {
+		if n, err := strconv.Atoi(v); err == nil && n >= 0 {
+			workJitterIterations = n
+		}
+	}
 
 	// Contended replicas default to fewer active slots, while tests can still
 	// override the cap to shape overload behavior explicitly.
@@ -115,6 +133,7 @@ func main() {
 		w.Header().Set("X-Latency-Estimate", strconv.FormatInt(medianLatency, 10))
 		w.Header().Set("X-CPU-Load", strconv.Itoa(cpuLoad))
 		w.Header().Set("X-Server-ID", serverID)
+		w.Header().Set("X-Work-Multiplier", strconv.FormatFloat(workMultiplier, 'f', 3, 64))
 	}
 
 	// antagonistDelay turns CPU_LOAD into repeatable extra latency plus jitter.
@@ -131,7 +150,14 @@ func main() {
 
 	// cpuWork adds per-request computation so latency is not only sleep time.
 	cpuWork := func() {
-		hashIterations := 500 + rand.Intn(500)
+		hashIterations := workBaseIterations
+		if workJitterIterations > 0 {
+			hashIterations += rand.Intn(workJitterIterations)
+		}
+		hashIterations = int(float64(hashIterations) * workMultiplier)
+		if hashIterations < 1 {
+			hashIterations = 1
+		}
 		for i := 0; i < hashIterations; i++ {
 			digest := sha256.Sum256([]byte(fmt.Sprintf("%d-%d", time.Now().UnixNano(), i)))
 			_ = hex.EncodeToString(digest[:])
@@ -180,40 +206,36 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(map[string]interface{}{
-			"server_id":    serverID,
-			"duration_ms":  duration.Milliseconds(),
-			"cpu_load_pct": cpuLoad,
-			"rif":          atomic.LoadInt32(&serverRIF),
+			"server_id":         serverID,
+			"duration_ms":       duration.Milliseconds(),
+			"cpu_load_pct":      cpuLoad,
+			"rif":               atomic.LoadInt32(&serverRIF),
+			"work_multiplier":   workMultiplier,
+			"work_base_iters":   workBaseIterations,
+			"work_jitter_iters": workJitterIterations,
 		})
 	})
 
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		// Probes skip the capacity semaphore, but they still join RIF so the header
-		// reflects all work visible to the backend.
-		arrivalRIF := atomic.AddInt32(&serverRIF, 1)
-		arrivalRIF--
-		start := time.Now()
-
-		defer func() {
-			atomic.AddInt32(&serverRIF, -1)
-			latencyMs := time.Since(start).Milliseconds()
-			buckets.record(arrivalRIF, latencyMs)
-		}()
-
+		// Probes report current query pressure and query-latency estimates without
+		// adding synthetic query work or polluting the query latency buckets.
+		arrivalRIF := atomic.LoadInt32(&serverRIF)
 		time.Sleep(antagonistDelay())
 
 		setRIFHeaders(w, arrivalRIF)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(map[string]interface{}{
-			"status":       "healthy",
-			"server_id":    serverID,
-			"rif":          atomic.LoadInt32(&serverRIF),
-			"cpu_load_pct": cpuLoad,
+			"status":          "healthy",
+			"server_id":       serverID,
+			"rif":             atomic.LoadInt32(&serverRIF),
+			"cpu_load_pct":    cpuLoad,
+			"work_multiplier": workMultiplier,
 		})
 	})
 
-	log.Printf("[backend] server=%s port=%s cpu_load=%d%%", serverID, port, cpuLoad)
+	log.Printf("[backend] server=%s port=%s cpu_load=%d%% work_multiplier=%.3f work_iters=%d+%d",
+		serverID, port, cpuLoad, workMultiplier, workBaseIterations, workJitterIterations)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal(err)
 	}

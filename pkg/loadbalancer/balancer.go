@@ -83,8 +83,11 @@ func applyDefaults(cfg *Config) {
 	if cfg.SelectionChoices == 0 {
 		cfg.SelectionChoices = 2
 	}
-	if cfg.QRIF == 0 {
-		cfg.QRIF = 0.84
+	if cfg.QRIF < 0 {
+		cfg.QRIF = 0
+	}
+	if cfg.QRIF > 1 {
+		cfg.QRIF = 1
 	}
 	if cfg.Algorithm == "" {
 		cfg.Algorithm = AlgorithmPrequal
@@ -220,6 +223,11 @@ func (lb *LoadBalancer) probeServer(s *Server) *probeResult {
 	if headerValue := response.Header.Get("X-RIF"); headerValue != "" {
 		if parsedValue, err := strconv.ParseInt(headerValue, 10, 32); err == nil {
 			result.serverRIF = int32(parsedValue)
+		}
+	}
+	if headerValue := response.Header.Get("X-Latency-Estimate"); headerValue != "" {
+		if parsedValue, err := strconv.ParseInt(headerValue, 10, 64); err == nil && parsedValue > 0 {
+			result.latencyMs = parsedValue
 		}
 	}
 	if headerValue := response.Header.Get("X-CPU-Load"); headerValue != "" {
@@ -616,6 +624,12 @@ func rifQuantile(entries []*ProbeEntry, q float64) int32 {
 		rifValues = append(rifValues, entry.RIF)
 	}
 	sort.Slice(rifValues, func(i, j int) bool { return rifValues[i] < rifValues[j] })
+	if q <= 0 {
+		return rifValues[0]
+	}
+	if q >= 1 {
+		return rifValues[len(rifValues)-1]
+	}
 	quantileIndex := int(float64(len(rifValues)-1) * q)
 	if quantileIndex >= len(rifValues) {
 		quantileIndex = len(rifValues) - 1

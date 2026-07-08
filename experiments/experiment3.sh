@@ -3,14 +3,15 @@
 #   bash experiment3.sh <user>@<lb-hostname>
 #
 # RIF limit threshold sweep, Figure-9-style:
-#   fixed load, Prequal only, QRIF from RIF-heavy to latency-only.
+#   fixed load, Prequal only, fast/slow replicas, QRIF from RIF-heavy
+#   to latency-only.
 #
 # Designed for cloudlab_profile.py:
 #   20 physical backend nodes, one backend container per node.
 #
 # Env knobs:
-#   SKIP_PREPARE=1 TOTAL=20 SERVERS=20 PER_SERVER_QPS=25 LOAD=0.75
-#   STEP_SECONDS=240 WORKERS=30 BIN_SECONDS=5 WARMUP=15 PROBE_RATE=2
+#   SKIP_PREPARE=1 TOTAL=20 SERVERS=20 PER_SERVER_QPS=75 LOAD=0.75
+#   STEP_SECONDS=240 WORKERS=120 BIN_SECONDS=5 WARMUP=15 PROBE_RATE=3
 #   QRIFS="0 .35 .39 .43 .48 .53 .59 .66 .73 .81 .90 .99 .999 1.0"
 set -euo pipefail
 
@@ -18,19 +19,21 @@ LB_HOST="${1:?usage: bash experiment3.sh <user>@<lb-hostname>}"
 
 TOTAL="${TOTAL:-20}"
 SERVERS="${SERVERS:-20}"
-PER_SERVER_QPS="${PER_SERVER_QPS:-25}"
+PER_SERVER_QPS="${PER_SERVER_QPS:-75}"
 LOAD="${LOAD:-0.75}"
 STEP_SECONDS="${STEP_SECONDS:-240}"
 BIN_SECONDS="${BIN_SECONDS:-5}"
-WORKERS="${WORKERS:-30}"
+WORKERS="${WORKERS:-120}"
 WARMUP="${WARMUP:-15}"
-PROBE_RATE="${PROBE_RATE:-2}"
+PROBE_RATE="${PROBE_RATE:-3}"
 RIF_SAMPLE_INTERVAL="${RIF_SAMPLE_INTERVAL:-0.5}"
 SMOOTH_BINS="${SMOOTH_BINS:-9}"
 RIF_SMOOTH_SAMPLES="${RIF_SMOOTH_SAMPLES:-60}"
 HOST_CPU_INTERVAL="${HOST_CPU_INTERVAL:-5}"
 NO_HOST_CPU="${NO_HOST_CPU:-0}"
 SKIP_PREPARE="${SKIP_PREPARE:-0}"
+PREPARE_SCRIPT="${PREPARE_SCRIPT:-prepare_experiment3.py}"
+PREPARE_REMOTE="$(basename "${PREPARE_SCRIPT}")"
 QRIFS="${QRIFS:-0 .35 .39 .43 .48 .53 .59 .66 .73 .81 .90 .99 .999 1.0}"
 REMOTE_DIR="${REMOTE_DIR:-experiment3_results}"
 STAMP="$(date +%Y%m%d_%H%M%S)"
@@ -52,6 +55,7 @@ echo "    step seconds   : ${STEP_SECONDS}"
 echo "    workers        : ${WORKERS}"
 echo "    warmup         : ${WARMUP}"
 echo "    probe rate     : ${PROBE_RATE}"
+echo "    prepare script : ${PREPARE_SCRIPT}"
 echo "    host cpu       : $([ "${NO_HOST_CPU}" = "1" ] && echo "disabled" || echo "enabled")"
 echo "    qrif values    : ${QRIFS}"
 echo ""
@@ -62,11 +66,11 @@ if [ "${TOTAL}" != "${SERVERS}" ]; then
 fi
 
 echo ">>> [1/5] Copying experiment scripts to ${LB_HOST} ..."
-scp ${SSH_OPTS} prepare.py common.py experiment1.py experiment3.py "${LB_HOST}:~/"
+scp ${SSH_OPTS} "${PREPARE_SCRIPT}" common.py experiment1.py experiment3.py "${LB_HOST}:~/"
 
 if [ "${SKIP_PREPARE}" != "1" ]; then
-  echo ">>> [2/5] Preparing CloudLab topology for ${TOTAL} backend containers ..."
-  ssh ${SSH_OPTS} "${LB_HOST}" "python3 prepare.py --total ${TOTAL}"
+  echo ">>> [2/5] Preparing paper-style fast/slow topology for ${TOTAL} backend containers ..."
+  ssh ${SSH_OPTS} "${LB_HOST}" "python3 ~/${PREPARE_REMOTE} --total ${TOTAL}"
 else
   echo ">>> [2/5] SKIP_PREPARE=1 -> using existing containers."
 fi
@@ -101,6 +105,7 @@ if command -v rsync >/dev/null 2>&1; then
 else
   scp ${SSH_OPTS} -r "${LB_HOST}:~/${REMOTE_DIR}/"* "${LOCAL_OUT}/"
 fi
+scp ${SSH_OPTS} "${LB_HOST}:~/prepare_experiment3.log" "${LOCAL_OUT}/" 2>/dev/null || true
 scp ${SSH_OPTS} "${LB_HOST}:~/prepare.log" "${LOCAL_OUT}/" 2>/dev/null || true
 
 echo ">>> [5/5] Done."

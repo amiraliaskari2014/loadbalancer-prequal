@@ -24,9 +24,10 @@ import (
 	"strings"
 	"syscall"
 	"time"
+
+	"github.com/prequal/loadbalancer/pkg/loadbalancer"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/prequal/loadbalancer/pkg/loadbalancer"
 )
 
 func main() {
@@ -50,7 +51,7 @@ func main() {
 		ProbeTimeout:         2 * time.Second,
 		HealthCheckPath:      "/health",
 		ProbePoolSize:        16,
-		ProbeAgeTimeout:      5 * time.Second,
+		ProbeAgeTimeout:      time.Second,
 		ProbeRatePerQuery:    probesPerRequest,
 		ProbeRemoveRate:      1.0,
 		DriftRate:            1.0,

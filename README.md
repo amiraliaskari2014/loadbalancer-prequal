@@ -191,7 +191,16 @@ bash experiment2.sh <username>@<lb-host>
 ### Experiment 3: RIF Limit Threshold Sweep
 
 Runs a fixed-load Prequal experiment while sweeping `QRIF` from RIF-heavy
-control toward latency-only control.
+control toward latency-only control. This experiment uses
+`experiments/prepare_experiment3.py`, which disables bgload and creates the
+paper-style fast/slow split: odd-numbered replicas are fast, even-numbered
+replicas do 2x query work.
+
+Default settings:
+
+- `PER_SERVER_QPS=75`
+- `WORKERS=120`
+- `PROBE_RATE=3`
 
 Run:
 

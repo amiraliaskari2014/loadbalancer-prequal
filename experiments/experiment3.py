@@ -43,12 +43,13 @@ DEFAULT_QRIFS = [
     0.0, 0.35, 0.39, 0.43, 0.48, 0.53, 0.59,
     0.66, 0.73, 0.81, 0.90, 0.99, 0.999, 1.0,
 ]
+DEFAULT_PER_SERVER_QPS = 75
 DEFAULT_STEP_SECONDS = 240
 DEFAULT_BIN_SECONDS = 5
-DEFAULT_WORKERS = 30
+DEFAULT_WORKERS = 120
 DEFAULT_LOAD = 0.75
-DEFAULT_PROBE_RATE = 2.0
-ZERO_QRIF_RUNTIME = 1e-9
+DEFAULT_PROBE_RATE = 3.0
+ZERO_QRIF_RUNTIME = 0.0
 
 log = logging.getLogger("experiment3")
 
@@ -109,9 +110,18 @@ def qrif_label(q):
 
 
 def qrif_runtime(q):
-    # The current LB constructor treats QRIF == 0 as unset/default 0.84.
-    # A tiny positive value selects the minimum RIF quantile, matching q=0.
     return ZERO_QRIF_RUNTIME if abs(q) < 1e-12 else q
+
+
+def qrif_threshold(sorted_vals, q):
+    if not sorted_vals:
+        return None
+    if q <= 0:
+        return sorted_vals[0]
+    if q >= 1:
+        return sorted_vals[-1]
+    idx = int(float(len(sorted_vals) - 1) * q)
+    return sorted_vals[min(idx, len(sorted_vals) - 1)]
 
 
 def parse_phase_csv_2xx_latency(raw_path, phase, bin_seconds):
@@ -276,7 +286,7 @@ class RIFSampler:
             "rif_p50": percentile(vals, 50),
             "rif_p90": percentile(vals, 90),
             "rif_p99": percentile(vals, 99),
-            "rif_limit": percentile(vals, q * 100.0),
+            "rif_limit": qrif_threshold(vals, q),
             "sample_count": len(vals),
             "rif_values": json.dumps(vals),
         }
@@ -447,7 +457,7 @@ def write_json(path, payload):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--servers", type=int, default=20)
-    ap.add_argument("--per-server-qps", type=int, default=25)
+    ap.add_argument("--per-server-qps", type=int, default=DEFAULT_PER_SERVER_QPS)
     ap.add_argument("--load", type=float, default=DEFAULT_LOAD)
     ap.add_argument("--qrifs", type=float, nargs="+", default=DEFAULT_QRIFS)
     ap.add_argument("--probe-rate", type=float, default=DEFAULT_PROBE_RATE)
@@ -506,13 +516,12 @@ def main():
     log.info("qrifs=%s | probe_rate=%.4g | step=%ds | warmup=%ds | output=%s",
              [qrif_label(q) for q in args.qrifs], args.probe_rate,
              args.step_seconds, args.warmup, run_root)
-    log.info("QRIF=0 is run as %.1e because this LB treats exact zero as default.",
-             ZERO_QRIF_RUNTIME)
+    log.info("QRIF=0 is passed through exactly as RIF-only control.")
     log.info("=" * 70)
 
     rc, out = sh("sudo docker ps --format '{{.Names}}'")
     if "lb-prequal" not in out:
-        log.error("lb-prequal container not found. Run prepare.py first.")
+        log.error("lb-prequal container not found. Run prepare_experiment3.py first.")
         sys.exit(1)
 
     capture_lb_template("lb-prequal")
