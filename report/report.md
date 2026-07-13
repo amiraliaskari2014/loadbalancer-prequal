@@ -380,3 +380,54 @@ The fundamental conclusion of our scaled-down replication aligns perfectly with 
 Furthermore, the systems engineering work required for this reproduction yielded significant technical value. Transitioning from a theoretical concept to a physical CloudLab topology involved migrating from a Docker Compose demo to a 20-node profile, building idempotent preparation scripts, implementing realistic server-local RIF tracking, generating synthetic physical contention, isolating latency from error accounting, building deadline post-processors, mapping CPU telemetry to real host measurements, and executing a multi-scale experiment across $N \in \{5, 10, 20\}$ servers.
 
 These final results serve as a rigorous, scaled reproduction rather than an exact clone of Google's testbed. While absolute latency and error figures naturally differ from the source paper due to distinct backend, workload, client, and datacenter constraints, the qualitative conclusion remains definitive: utilizing fresh, server-local signals enables Prequal to bypass overloaded replicas vastly better than WRR, and this architectural advantage scales dynamically with the size of the distributed system.
+
+# Appendix: Reproduction Commands
+
+From the project root:
+
+```bash
+cd loadbalancer-prequal/experiments
+
+export SSH_OPTS="-A -o ForwardAgent=yes -o IdentitiesOnly=yes -i $HOME/.ssh/cloudlab_ed25519 -o ServerAliveInterval=30 -o ServerAliveCountMax=20 -o StrictHostKeyChecking=accept-new"
+```
+
+Run the main 20-server load ramp:
+
+```bash
+bash experiment1.sh <username>@<lb-host>
+```
+
+Run the 5/10/20-server scaling experiment:
+
+```bash
+bash experiment1_scaling.sh <username>@<lb-host>
+```
+
+Run the probe-rate sweep:
+
+```bash
+bash experiment2.sh <username>@<lb-host>
+```
+
+Run the QRIF threshold sweep:
+
+```bash
+bash experiment3.sh <username>@<lb-host>
+```
+
+If the CloudLab nodes have already been prepared and containers are still
+running, add `SKIP_PREPARE=1` before a command. After rebooting nodes, run
+without `SKIP_PREPARE=1` so Docker containers and monitoring are recreated.
+
+Post-processing for Experiment 1 run directories:
+
+```bash
+python3 postprocess_smooth.py <run_dir> --smooth-bins 5
+python3 postprocess_deadline.py <run_dir> --deadline-us 5000000 --smooth-bins 5
+```
+
+All final local result folders are under:
+
+```text
+/Users/gary/Downloads/loadbalancer-prequal/experiments/results/
+```
