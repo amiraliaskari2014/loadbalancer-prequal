@@ -15,7 +15,7 @@ Bartek Wydrowski, Robert Kleinberg, Stephen M. Rumble, and Aaron Archer:
 
 ---
 
-# Introduction
+# 1. Introduction
 
 Large-scale distributed services rely on load balancers to distribute user traffic across backend replicas. Historically, the industry standard has been to balance physical resource utilization, typically CPU load, evenly across these replicas using algorithms like Weighted Round Robin (WRR). However, in modern multi-tenant cloud environments, replicas frequently share physical hardware with noisy background processes (antagonist load) that throttle their processing capacity. When traditional load balancers force an equal CPU workload onto these throttled replicas, local queues rapidly overflow. This leads to severe tail-latency explosions ($p99.9$) and cascading request timeouts. Consequently, balancing resource utilization is fundamentally the wrong objective when environments are heterogeneous or highly contested.
 
@@ -37,9 +37,9 @@ $$\text{Load Steps} \in \{0.75\times, 0.83\times, 0.93\times, 1.03\times, 1.14\t
 <img
 alt="Load ramp experiment. Gray background denotes WRR policy, white denotes Prequal"
 src="figures/paper_plot_experiment1.png"
-style="width:30%;"
+style="width:88%;"
 />
-<p>Figure 1: Load ramp experiment. Gray background denotes WRR policy, white denotes Prequal</p>
+<p><b>Figure 1</b>: Load ramp experiment. Gray background denotes WRR policy, white denotes Prequal</p>
 </center>
 
 This experiment shows that Prequal can effectively overcome the motivated challenge of multi-tenant resource contention. Prequal maintains a $0.0\%$ HTTP error rate and keeps the $p99.9$ tail latency completely flat (below $600\text{ ms}$) under an extreme $1.74\times$ overload, while traditional Weighted Round Robin (WRR) suffers up to $25\%$ dropped requests and a $5\text{ s}$ tail-latency timeout explosion. This experiment is highly important because it shows that the paper can effectively overcome the motivated challenge of multi-tenant resource contention. It proves that by prioritizing real-time queue depths (Requests-in-Flight) over average resource-load balancing, Prequal successfully bypasses hidden background bottlenecks to keep distributed services fast and error-free.
@@ -55,9 +55,9 @@ $$\text{Probe Rates} \in \{4.0, 2\sqrt{2}, 2.0, \sqrt{2}, 1.0, \sqrt{0.5}, 0.5\}
 <img
 alt="Probing rate experiment"
 src="figures/paper_plot_experiment2.png"
-style="width:30%;"
+style="width:88%;"
 />
-<p>Figure 2: Probing rate experiment</p>
+<p><b>Figure 2</b>: Probing rate experiment</p>
 </center> 
 
 This experiment evaluates the trade-off between telemetry freshness and bandwidth overhead. The results show that Prequal remains stable and low-latency as long as the probing rate stays above 1.0 probe per request, but degrades into queuing and latency spikes when fractional truncation drops the active probe loop below this threshold. It is important because it evaluates the physical boundary conditions of Prequal's active probing loop, identifying the trade-off between telemetry freshness and bandwidth overhead before queue visibility collapses.
