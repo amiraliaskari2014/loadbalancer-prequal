@@ -36,7 +36,7 @@ $$\text{Load Steps} \in \{0.75\times, 0.83\times, 0.93\times, 1.03\times, 1.14\t
 <center>
 <img
 alt="Load ramp experiment. Gray background denotes WRR policy, white denotes Prequal"
-src="report/figures/paper_plot_experiment1.png"
+src="figures/paper_plot_experiment1.png"
 style="width:30%;"
 />
 <p>Figure 1: Load ramp experiment. Gray background denotes WRR policy, white denotes Prequal</p>
@@ -54,7 +54,7 @@ $$\text{Probe Rates} \in \{4.0, 2\sqrt{2}, 2.0, \sqrt{2}, 1.0, \sqrt{0.5}, 0.5\}
 <center>
 <img
 alt="Probing rate experiment"
-src="report/figures/paper_plot_experiment2.png"
+src="figures/paper_plot_experiment2.png"
 style="width:30%;"
 />
 <p>Figure 2: Probing rate experiment</p>
