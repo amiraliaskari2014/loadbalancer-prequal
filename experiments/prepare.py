@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-prepare.py -- set up the whole Prequal experiment over SSH (run ON the lb node).
+prepare.py -- provision the CloudLab Prequal experiment from the lb node.
 
-Replaces CloudLab's unreliable startup service. It discovers the backend hosts,
-packs `--total` backend containers across them, then installs docker, clones the
-repo, builds images, and starts every container/service on every node -- in
-parallel, with logging, retries, and idempotency. Re-runnable any time.
+This script replaces CloudLab startup commands. It discovers bhost* backend
+nodes, prepares inter-node SSH, installs dependencies, clones the repository,
+builds Docker images, and starts the backend, load-balancer, background-load,
+Prometheus, and Grafana containers in parallel with retries and logging.
 
-Backends are numbered server1..serverN, round-robin across hosts. Contended vs
-clean is interleaved by global index (clean if G %% cleanStep == 0). bgload hits
-all contended containers.
+For the final CloudLab profile, use --total 20 so each physical bhost runs one
+measured backend container. Smaller totals are used by the scaling experiment.
+Backends are numbered server1..serverN. Clean and contended replicas are
+interleaved by global index, and bgload sends direct traffic to contended
+replicas to create antagonist load.
 
-Normally invoked by run_all.sh, but you can run it directly on the lb node:
-    python3 prepare.py --total 25
-    python3 prepare.py --total 25 --per-host 8 --jobs 8
+Normally invoked by experiment1.sh, experiment1_scaling.sh, or experiment2.sh.
+Direct use on the lb node:
+    python3 prepare.py --total 20
+    python3 prepare.py --total 10 --jobs 8
 """
 
 import argparse

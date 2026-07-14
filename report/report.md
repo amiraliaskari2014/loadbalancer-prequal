@@ -19,7 +19,24 @@ Bartek Wydrowski, Robert Kleinberg, Stephen M. Rumble, and Aaron Archer:
 
 Large-scale distributed services rely on load balancers to distribute user traffic across backend replicas. Historically, the industry standard has been to balance physical resource utilization, typically CPU load, evenly across these replicas using algorithms like Weighted Round Robin (WRR). However, in modern multi-tenant cloud environments, replicas frequently share physical hardware with noisy background processes (antagonist load) that throttle their processing capacity. When traditional load balancers force an equal CPU workload onto these throttled replicas, local queues rapidly overflow. This leads to severe tail-latency explosions ($p99.9$) and cascading request timeouts. Consequently, balancing resource utilization is fundamentally the wrong objective when environments are heterogeneous or highly contested.
 
-To solve this, Google introduced Prequal (Probing to Reduce Queuing and Latency). Rather than relying on stale CPU statistics, Prequal utilizes lightweight, asynchronous client-side probing to capture real-time server telemetry. Each load balancer queries backends for two direct signals: active Requests-In-Flight (RIF) and estimated execution latency. Prequal then applies the Hot-Cold Lexicographic (HCL) rule. It calculates a dynamic threshold ($Q_{\text{RIF}}$) based on the $q$-th percentile of observed RIF values. Any server with a queue size above this limit is classified as "Hot"  and excluded. The request is then routed strictly to the "Cold" server with the lowest estimated latency.
+To solve this, Google introduced Prequal (Probing to Reduce Queuing and Latency). Rather than relying on stale CPU statistics, Prequal uses lightweight, asynchronous client-side probing to capture real-time server telemetry. The key design decision is that request routing is driven by the state of the server queues observed directly at the time of decision, not by an averaged resource-utilization signal that may hide local contention.
+
+Prequal runs a probe worker alongside the client or load-balancer task. This worker continuously sends small probe messages to a subset of backend replicas and stores the returned `ProbeResponse` objects in a local probe pool. Each response contains the server's active Requests-In-Flight (RIF), which approximates queue depth, and an estimated execution latency, which approximates how quickly the server can process another request. Because probing is asynchronous, normal user queries do not wait for fresh probes to complete. Instead, when a query arrives, the load balancer consults the most recent probe pool snapshot and immediately chooses a destination.
+
+<center>
+<img
+alt="Prequal client task with asynchronous probe worker, probe pool, and best-server query path"
+src="figures/prequal_image.png"
+style="width:88%;"
+/>
+<p><b>Figure 1:</b> Prequal uses asynchronous probes to maintain a local pool of recent server observations. Incoming queries use this pool to pick the best backend without synchronously probing every server.</p>
+</center>
+
+The server-selection rule is called Hot-Cold Lexicographic (HCL). First, Prequal computes a dynamic RIF threshold ($Q_{\text{RIF}}$) from the $q$-th percentile of the recent RIF values in the probe pool. Servers whose RIF is above this threshold are classified as "Hot"; these servers are likely building queues and are avoided even if their historical CPU usage looks acceptable. The remaining "Cold" servers are then compared using estimated latency, and the query is routed to the cold server with the lowest latency estimate. This two-stage rule deliberately separates queue protection from latency optimization: RIF prevents the balancer from feeding overloaded queues, while latency chooses the fastest option among the safe candidates.
+
+Operationally, the algorithm is intentionally local and lightweight. Each load-balancing task maintains its own probe pool; it does not need a centralized controller or global cluster state. A probe response is useful even if it is slightly stale because it captures the exact symptom that hurts user requests: whether work is accumulating at a server. This is different from CPU utilization. CPU can be low because a process is throttled, waiting, or scheduled irregularly, while RIF directly indicates that user-visible requests are queued or currently executing. Prequal therefore treats RIF as the first safety filter and latency as the second ranking signal.
+
+This mechanism differs from WRR in an important way. WRR can keep sending traffic to a contended server until its long-term weight changes, so it reacts slowly to hidden interference. Prequal reacts to short-term server-local signals: if a replica suddenly becomes slow because of colocated work, its RIF rises, its latency estimate worsens, and future queries are shifted away. The algorithm therefore does not need to know why a backend is slow; it only needs fresh evidence that the backend is accumulating work.
 
 The original paper contributes a significant paradigm shift in distributed systems, demonstrating that decoupling queue-depth protection from latency minimization allows load balancers to bypass multi-tenant bottlenecks. In this project, we independently reproduce and evaluate Prequal’s core claims on a physical bare-metal CloudLab cluster. We validate its robustness to variable antagonist load, map its probing-rate sensitivity, and further extend the original research by exploring how these routing dynamics scale across varying cluster sizes.
 
@@ -39,7 +56,7 @@ alt="Load ramp experiment. Gray background denotes WRR policy, white denotes Pre
 src="figures/paper_plot_experiment1.png"
 style="width:88%;"
 />
-<p><b>Figure 1</b>: Load ramp experiment. Gray background denotes WRR policy, white denotes Prequal</p>
+<p><b>Figure 2</b>: Load ramp experiment. Gray background denotes WRR policy, white denotes Prequal</p>
 </center>
 
 In the source paper, this experiment shows that Prequal can overcome the motivated challenge of multi-tenant resource contention. Prequal keeps high-percentile latency far below the $5\text{ s}$ timeout region under extreme overload, while traditional Weighted Round Robin (WRR) suffers large error spikes and timeout-level tail latency. The result is important because it demonstrates that prioritizing real-time queue depth (Requests-in-Flight) over average resource-load balancing can help a load balancer bypass hidden background bottlenecks.
@@ -57,7 +74,7 @@ alt="Probing rate experiment"
 src="figures/paper_plot_experiment2.png"
 style="width:88%;"
 />
-<p><b>Figure 2</b>: Probing rate experiment</p>
+<p><b>Figure 3</b>: Probing rate experiment</p>
 </center> 
 
 This experiment evaluates the trade-off between telemetry freshness and bandwidth overhead. The results show that Prequal remains stable and low-latency as long as the probing rate stays above 1.0 probe per request, but degrades into queuing and latency spikes when fractional truncation drops the active probe loop below this threshold. It is important because it evaluates the physical boundary conditions of Prequal's active probing loop, identifying the trade-off between telemetry freshness and bandwidth overhead before queue visibility collapses.
@@ -130,7 +147,7 @@ The most important deviations are:
 - Deadline semantics: the backend emits HTTP 503 overload responses instead of waiting for every failed request to hit a client-side 5 second timeout.
 - WRR baseline: our `weightedrr` policy is the repository's simplified weighted baseline. It is not Google's production WRR, which uses smoothed goodput, CPU utilization, and error rate.
 - CPU plots: our CPU panel samples host `/proc/stat`; it is therefore a host-level diagnostic, not the exact same allocation-normalized CPU metric used in Google's monitoring system.
-- Artifact: the paper does not provide the production Prequal implementation. This project is a clean-room reproduction of the mechanism.
+- Artifact: the paper does not provide the production Prequal implementation. This project adapts a public prototype and extends it with CloudLab orchestration, measurement, and post-processing rather than reproducing Google's production system exactly.
 
 These deviations were necessary because the original environment depends on Google's internal RPC system, production deployment infrastructure, and datacenter monitoring stack. The CloudLab setup is smaller, but it captures the mechanism we wanted to test: when some replicas are more contended than others, does a Prequal-like policy avoid errors and high tail latency better than WRR?
 
@@ -183,7 +200,7 @@ alt="Our 20-server smoothed load ramp with 2xx-only latency and non-2xx errors"
 src="figures/experiment1_smoothed_s20.png"
 style="width:88%;"
 />
-<p><b>Figure 3:</b> Our 20-server load ramp using raw semantics: latency percentiles use only 2xx responses, and non-2xx responses remain in the error panel.</p>
+<p><b>Figure 4:</b> Our 20-server load ramp using raw semantics: latency percentiles use only 2xx responses, and non-2xx responses remain in the error panel.</p>
 </center>
 
 <center>
@@ -192,7 +209,7 @@ alt="Our 20-server load ramp with non-2xx responses mapped to 5 seconds"
 src="figures/experiment1_deadline_smoothed_s20.png"
 style="width:88%;"
 />
-<p><b>Figure 4:</b> Our 20-server load ramp with paper-style deadline post-processing. Non-2xx responses are mapped to 5 seconds before latency percentiles are recomputed.</p>
+<p><b>Figure 5:</b> Our 20-server load ramp with paper-style deadline post-processing. Non-2xx responses are mapped to 5 seconds before latency percentiles are recomputed.</p>
 </center>
 
 The numerical summary for the final 20-server scaling phase at $1.74\times$ load is:
@@ -227,7 +244,7 @@ alt="Our probe-rate sweep showing latency and RIF increasing as effective probe 
 src="figures/experiment2_probe_rate.png"
 style="width:82%;"
 />
-<p><b>Figure 5:</b> Our probe-rate sweep at 20 servers and 1.5x load.</p>
+<p><b>Figure 6:</b> Our probe-rate sweep at 20 servers and 1.5x load.</p>
 </center>
 
 The result partially matches the paper. At nominal rates of 4, $2\sqrt{2}$, and 2, p99 latency remains around 58-60 ms and p99.9 around 89-90 ms with no errors. At nominal rates $\sqrt{2}$ and 1, p99 rises to about 88 ms and p99.9 rises to about 104-105 ms. At nominal rates below 1, p99 approaches 98 ms, p99.9 reaches about 122 ms, and errors increase.
@@ -247,7 +264,7 @@ Google’s Figure 8 depicts a smooth degradation in queuing and latency as probe
 
 Our replication effort yielded three primary takeaways for the study of distributed systems:
 
-1.  **The Validity of Queue-Aware Selection:** We independently verified the main direction of Google's thesis. In shared, multi-tenant cloud environments, balancing resource consumption (CPU load) is often the wrong objective. Operating systems and hypervisors schedule threads dynamically, which hides bottlenecks from traditional balancers. Real-time queue depth (Requests-in-Flight) is a significantly more accurate indicator of server health in our setup.
+1.  **The Validity of Queue-Aware Selection:** We independently verified the main direction of Google's work. In shared, multi-tenant cloud environments, balancing resource consumption (CPU load) is often the wrong objective. Operating systems and hypervisors schedule threads dynamically, which hides bottlenecks from traditional balancers. Real-time queue depth (Requests-in-Flight) is a significantly more accurate indicator of server health in our setup.
     
 2.  **The Power of Simple Signals:** Prequal achieves this massive latency and error reduction using incredibly simple signals, just a two-tier classification (Hot vs. Cold) based on a dynamic percentile. It does not require complex machine learning, state synchronization, or centralized coordination.
     
@@ -285,7 +302,7 @@ alt="5-server smoothed 2xx-only load ramp"
 src="figures/experiment1_smoothed_s5.png"
 style="width:100%;"
 />
-<p><b>Figure 6:</b> 5-server raw semantics.</p>
+<p><b>Figure 7:</b> 5-server raw semantics.</p>
 </div>
 <div  style="display:inline-block; width:30%; padding-left:1em; vertical-align:top;">
 <img
@@ -293,7 +310,7 @@ alt="10-server smoothed 2xx-only load ramp"
 src="figures/experiment1_smoothed_s10.png"
 style="width:100%;"
 />
-<p><b>Figure 7:</b> 10-server raw semantics.</p>
+<p><b>Figure 8:</b> 10-server raw semantics.</p>
 </div>
 <div  style="display:inline-block; width:30%; padding-left:1em; vertical-align:top;">
 <img
@@ -301,7 +318,7 @@ alt="20-server smoothed 2xx-only load ramp"
 src="figures/experiment1_smoothed_s20.png"
 style="width:100%;"
 />
-<p><b>Figure 8:</b> 20-server raw semantics.</p>
+<p><b>Figure 9:</b> 20-server raw semantics.</p>
 </div>
 </center>
 
@@ -313,7 +330,7 @@ alt="5-server deadline-smoothed load ramp"
 src="figures/experiment1_deadline_smoothed_s5.png"
 style="width:100%;"
 />
-<p><b>Figure 9:</b> 5-server deadline post-processing.</p>
+<p><b>Figure 10:</b> 5-server deadline post-processing.</p>
 </div>
 <div  style="display:inline-block; width:30%; padding-left:1em; vertical-align:top;">
 <img
@@ -321,7 +338,7 @@ alt="10-server deadline-smoothed load ramp"
 src="figures/experiment1_deadline_smoothed_s10.png"
 style="width:100%;"
 />
-<p><b>Figure 10:</b> 10-server deadline post-processing.</p>
+<p><b>Figure 11:</b> 10-server deadline post-processing.</p>
 </div>
 <div  style="display:inline-block; width:30%; padding-left:1em; vertical-align:top;">
 <img
@@ -329,7 +346,7 @@ alt="20-server deadline-smoothed load ramp"
 src="figures/experiment1_deadline_smoothed_s20.png"
 style="width:100%;"
 />
-<p><b>Figure 11:</b> 20-server deadline post-processing.</p>
+<p><b>Figure 12:</b> 20-server deadline post-processing.</p>
 </div>
 </center>
 
@@ -341,7 +358,7 @@ alt="Scaling errors by load level for WRR and Prequal"
 src="figures/experiment1_scaling_errors.png"
 style="width:75%;"
 />
-<p><b>Figure 12:</b> Error QPS by load level for 5, 10, and 20 servers.</p>
+<p><b>Figure 13:</b> Error QPS by load level for 5, 10, and 20 servers.</p>
 </center>
 
 <center>
@@ -350,7 +367,7 @@ alt="Scaling error rate by number of servers with linear and log-style y axis"
 src="figures/experiment1_scaling_error_by_servers_linear_log.png"
 style="width:88%;"
 />
-<p><b>Figure 13:</b> Mean error QPS versus number of servers. Point labels show total non-2xx responses.</p>
+<p><b>Figure 14:</b> Mean error QPS versus number of servers. Point labels show total non-2xx responses.</p>
 </center>
   
 | Servers | Policy | Total responses | Non-2xx responses | Mean error QPS | Overall error rate |
@@ -368,7 +385,7 @@ The primary takeaway is that Prequal's routing advantage becomes distinctly easi
 # Chapter 6: Reproducibility Assessment of the Paper
 
 
-The original paper is exceptionally strong conceptually, but it is not fully reproducible from the text alone. It clearly articulates the primary mechanisms, algorithmic parameters, and experimental trends required to validate the theory: the load levels in Figure 6, the probe-rate values in Figure 8. These details provided a sufficient architectural blueprint to design a faithful, scaled-down physical experiment.
+The original paper is exceptionally strong conceptually, but it is not fully reproducible from the paper alone. The paper clearly articulates the primary mechanisms, algorithmic parameters, and experimental trends required to validate the theory: the load levels in Figure 6 and the probe-rate values in Figure 8. Our implementation work combined those descriptions with an existing public prototype, then adapted the system substantially for CloudLab execution, physical-node deployment, experiment automation, telemetry collection, and post-processing. In other words, the paper provided the scientific design and expected trends, while the implementation baseline made it possible to build a faithful, scaled-down physical experiment without access to Google's production code.
 
 However, several critical deployment details are deeply coupled to Google's internal, proprietary infrastructure and are inherently unavailable to external researchers:
 
